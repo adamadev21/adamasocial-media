@@ -1,6 +1,6 @@
-const config = require('../../utilities/config');
 const firebase = require('firebase');
 const { db, admin} = require("../../utilities/admin");
+const { config } = require('../../utilities/config');
 const { signupValidation } = require("../../utilities/helpers/validation");
 firebase.initializeApp(config);
 exports.signup = (req, res) => {
@@ -53,17 +53,17 @@ exports.signup = (req, res) => {
         } else {
           return res.status(500).json({ error: err.code });
         }
-      });
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(newUser.email, newUser.password)
-      .then((data) => {
-        return res
-          .status(201)
-          .json({ message: `user ${data.user.uid} has signed up successfully` });
-      })
-      .catch((err) => {
-        console.error(err);
-        return res.status(500).json({ error: err.code });
-      });
-  };
+   });}
+  //   firebase
+  //     .auth()
+  //     .createUserWithEmailAndPassword(newUser.email, newUser.password)
+  //     .then((data) => {
+  //       return res
+  //         .status(201)
+  //         .json({ message: `user ${data.user.uid} has signed up successfully` });
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       return res.status(500).json({ error: err.code });
+  //     });
+  // }
