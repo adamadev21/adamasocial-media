@@ -20,6 +20,7 @@ exports.getAllScreams = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
+      return res.status(500).json({general: "Something went wrong"})
     });
 };
 exports.postScream = (req, res) => {
@@ -30,7 +31,7 @@ exports.postScream = (req, res) => {
     body: req.body.body,
     userHandle: req.user.handle,
     createdAt: new Date().toISOString(),
-    imageUrl: req.user.userImage,
+    userImage: req.user.imageUrl,
     likeCount: 0,
     commentCount: 0,
   };

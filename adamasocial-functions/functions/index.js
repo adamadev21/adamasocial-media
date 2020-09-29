@@ -1,7 +1,11 @@
 //?===================?
 //?IMPORTS AND VARIABLES********
 //????\\\*******************
+
+
+
 const { FBAuth } = require('./utilities/middleware/middleware');
+const cors = require("cors");
 const functions = require('firebase-functions');
 const {
   getAllScreams,
@@ -25,11 +29,13 @@ const admin = require('./utilities/admin');
 const { db } = require('./utilities/admin');
 const app = require('express')();
 
+app.use(cors())
+
 //*===================>
 //*ROUTES************
 //******************* */
 //? screams routes
-app.get('/screams', FBAuth, getAllScreams);
+app.get('/screams', getAllScreams);
 app.post('/screams', FBAuth, postScream);
 app.get('/scream/:screamId', getScream);
 app.get('/screams/:screamId/like', FBAuth, likeScream);
@@ -152,4 +158,4 @@ exports.deleteNotificationOnLike = functions.firestore
       return res.status(500).json({error: err.code})
     })
   })
-  
+  //I added cors to see if it would help solve the problem
