@@ -13,7 +13,7 @@ exports.loginValidation = (data) => {
   valid;
   if (isEmpty(data.email)) errors.email = 'Must not be empty';
   else if (!isEmail(data.email)) errors.email = 'Must be a valid email';
-  if (isEmpty(data.password)) error.password = 'Must not be empty';
+  if (isEmpty(data.password)) errors.password = 'Must not be empty';
 
   valid = Object.keys(errors).length === 0 ? true : false;
   return { errors, valid };
@@ -24,7 +24,7 @@ exports.signupValidation = (data) => {
   if (isEmpty(data.email)) {
     errors.email = 'Must not be empty';
   } else if (!isEmail(data.email)) {
-    error.email = 'Must be a valid email address';
+    errors.email = 'Must be a valid email address';
   }
   if (isEmpty(data.password)) {
     errors.password = 'Must not be empty';

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 import withStyles from "@material-ui/styles/withStyles";
 import {Link} from 'react-router-dom'
 import Card from '@material-ui/core/Card';
@@ -14,14 +14,20 @@ const styles = {
     card:{
         display: 'flex',
         marginBottom: 20,
+    
+
 
     },
-    image:{
+    media:{
         minWidth:200,
         minHeight:150,
+        marginLeft: 20
     },
     content: {
         padding: 25,
+        display:'flex',
+        flexDirection: 'column',
+        textDecoration: 'none'
     }
 }
   
@@ -43,16 +49,15 @@ const styles = {
     } = this.props;
     return (
       <Card className={classes.card}>
-        <CardMedia className={classes.image} image={userImage} title="Profile Name"/>
+        <CardMedia className={classes.media} image={userImage} title="Profile Name"/>
         <CardContent className={classes.content}> 
-        <Typography variant="h5" component={Link}>
-          {userHandle}
+        <Typography variant="p" component={Link} to= {`user/${userHandle}`}>
+     Posted: 
         </Typography>
-        <Typography variant="body2" component={Link}>
-          {}
-        </Typography>
+        <Typography variant="body2" component={Link} to={`user/${userHandle}`}>
+        {userHandle}        </Typography>
 
-        <Typography variant="body1" component={Link}>
+        <Typography variant="body1" component={Link} to={`user/${userHandle}`}>
           {body}
         </Typography>
         </CardContent>

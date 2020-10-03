@@ -60,7 +60,7 @@ exports.getAuthenticatedUser = (req, res) => {
     .get()
     .then((doc) => {
       if (doc.exists) {
-        userData.credentials = doc.data();
+        userData.userCredentials = doc.data();
         return db
           .collection('likes')
           .where('userHandle', '==', req.user.handle)
@@ -86,7 +86,8 @@ exports.getAuthenticatedUser = (req, res) => {
             screamId: doc.data().screamId,
             notificationId: doc.id
           });
-        })
+        });
+        return res.status(200).json(userData)
       })
     .catch((err) => {
       console.error(err);

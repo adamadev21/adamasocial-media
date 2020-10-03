@@ -7,17 +7,22 @@ exports.login = (req, res)=>{
       email: req.body.email,
       password: req.body.password
     };
-    loginValidation(user);
-    firebase.auth().signInWithEmailAndPassword(user.email,user.password)
-    .then(data=>{
-      return data.user.getIdToken();
-    })
-    .then(token => {
-      return res.json({token})
-    })
-    .catch(err => {
-      console.error(err)
-      if(err.code==="auth/wrong-password") res.status(400).json({password: "Wrong password, please try again"})
-      res.status(500).json({error: err.code})
-    })
+    const {errors, valid} = loginValidation(user);
+    if (valid) {
+
+      firebase.auth().signInWithEmailAndPassword(user.email,user.password)
+      .then(data=>{
+        return data.user.getIdToken();
+      })
+      .then(token => {
+        return res.json({token})
+      })
+      .catch(err => {
+        console.error(err)
+        errors.general = "Wrong credentials, please try again!"
+        res.status(500).json(errors)
+      })
+    } else {
+      return res.status(400).json(errors);
+    }
   }

@@ -3,9 +3,11 @@
 //????\\\*******************
 
 
-
+const app = require('express')();
 const { FBAuth } = require('./utilities/middleware/middleware');
 const cors = require("cors");
+//*Allow cross origin resource sharing
+app.use(cors({origin: true}))
 const functions = require('firebase-functions');
 const {
   getAllScreams,
@@ -27,9 +29,9 @@ const {
 const { postComment } = require('./handlers/screams/comments/comments');
 const admin = require('./utilities/admin');
 const { db } = require('./utilities/admin');
-const app = require('express')();
 
-app.use(cors())
+
+
 
 //*===================>
 //*ROUTES************
@@ -51,6 +53,7 @@ app.get('/user', FBAuth, getAuthenticatedUser);
 //TODO Get user details and get notifications
 app.get('/user/:handle', getusUserDetails);
 app.get('notifications', FBAuth, markNotificationsRead)
+
 exports.api = functions.https.onRequest(app);
 
 //*Creat notifications

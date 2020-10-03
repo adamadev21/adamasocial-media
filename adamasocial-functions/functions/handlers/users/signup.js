@@ -12,11 +12,14 @@ exports.signup = (req, res) => {
     };
     console.log(newUser);
     console.log("config", config)
-  signupValidation(newUser);
+  const {valid, errors} = signupValidation(newUser);
     //* let's handle the user data here
     let token, userId;
-    const noImg = 'noImage';
-    db.doc(`/users/${newUser.handle}`)
+    const noImg = 'noImage.png';
+    if (!valid) return res.status(400).json(errors)
+    else {
+
+      db.doc(`/users/${newUser.handle}`)
       .get()
       .then((data) => {
         if (data.exists) {
@@ -48,12 +51,10 @@ exports.signup = (req, res) => {
       })
       .catch((err) => {
         console.error(err);
-        if (err.code === 'auth/email-already-in-use') {
-          return res.status(400).json({ email: 'email already in use' });
-        } else {
-          return res.status(500).json({ error: err.code });
-        }
-   });}
+        errors.general = "Something went wrong, please try again!"
+        res.status(500).json(errors)
+   });
+    }}
   //   firebase
   //     .auth()
   //     .createUserWithEmailAndPassword(newUser.email, newUser.password)

@@ -7,8 +7,8 @@ import { Link } from 'react-router-dom';
 export default function Navbar() {
   return (
     <div className='' style={{justifyContent: "center"}}>
-        <AppBar>
-            <Toolbar>
+        <AppBar >
+            <Toolbar style={{justifyContent: "center"}} >
             <Button component={Link} to='/' color='inherit'>Home</Button>
                 <Button  component={Link} to='/login' color='inherit'>Login</Button>
                 <Button component={Link} to='/signup' color='inherit'>Signup</Button>

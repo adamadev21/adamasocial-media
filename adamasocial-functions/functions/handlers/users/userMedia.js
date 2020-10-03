@@ -1,4 +1,4 @@
-const config= require('../../utilities/config');
+const {config}= require('../../utilities/config');
 const {admin, db} = require('../../utilities/admin');
 
 exports.uploadImage = (req,res)=>{
@@ -16,13 +16,13 @@ exports.uploadImage = (req,res)=>{
         console.log(mimetype);
         //*my.file.png
         const imageExtension = filename.split('.')[filename.split('.').length - 1];
-        imageFileName = `{Math.round(Math.random()*10000000000)}`.concat('.',`${imageExtension}`);
+        imageFileName = `${Math.round(Math.random()*10000000000)}`.concat('.',`${imageExtension}`);
         const filepath =path.join(os.tmpdir(), imageFileName);
         imageToBeUploaded = {filepath, mimetype};
         file.pipe(fs.createWriteStream(filepath));
     });
     busboy.on('finish', ()=> {
-        admin.storage().bucket().upload(imageToBeUploaded.filepath, {
+        admin.storage().bucket(config.storageBucket).upload(imageToBeUploaded.filepath, {
             resumable: false,
             metadata: {
                 metadata: {
@@ -37,7 +37,7 @@ exports.uploadImage = (req,res)=>{
             
         )
         .then(()=>{
-            res.json({message: "Image updated successfully"})
+            return res.json({message: "Image updated successfully"})
         })
         .catch(err=> {
             res.status(500).json({ error: err.code})
