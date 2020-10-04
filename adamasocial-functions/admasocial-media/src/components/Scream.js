@@ -9,7 +9,10 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+// import moment from "moment"
+dayjs.extend(relativeTime)
 const styles = {
     card:{
         display: 'flex',
@@ -51,13 +54,12 @@ const styles = {
       <Card className={classes.card}>
         <CardMedia className={classes.media} image={userImage} title="Profile Name"/>
         <CardContent className={classes.content}> 
-        <Typography variant="p" component={Link} to= {`user/${userHandle}`}>
-     Posted: 
+        <Typography variant="h5" component={Link} to= {`user/${userHandle}`}>
+        {userHandle}  
         </Typography>
-        <Typography variant="body2" component={Link} to={`user/${userHandle}`}>
-        {userHandle}        </Typography>
-
-        <Typography variant="body1" component={Link} to={`user/${userHandle}`}>
+        <Typography color='black' variant="body2" component={Link}>
+            Posted:   {dayjs().fromNow(createdAt)}   </Typography>
+        <Typography variant="body1" >
           {body}
         </Typography>
         </CardContent>
