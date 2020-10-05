@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import logo from './logo.png';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 //*Material Ui stuff
 import withStyles from '@material-ui/styles/withStyles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
 //*Redux stuff here
 import { connect } from 'react-redux';
@@ -23,17 +21,14 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
   },
-  button: {
-    marginTop: '10px',
-    color: 'primary',
-  },
   image: {
     marginTop: '50px',
     maxWidth: '60px',
     maxHeight: '60px',
   },
   button: {
-    position: 'relative',
+    color: 'primary',
+   position: 'relative',
     marginTop: '20px',
     maxHeight: '35px',
     maxWidth: '100px',

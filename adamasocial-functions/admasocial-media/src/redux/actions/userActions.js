@@ -52,12 +52,11 @@ export const getUserData = () => (dispatch) => {
   axios
     .get('http://localhost:5001/admasocial-media/us-central1/api/user')
     .then((res) => {
-      console.log(res.data)
-      dispatch({ type: SET_USER, payload: res.data });
+  //* Now i NEED to get the user's full data to display in profile
+ dispatch({type: SET_USER, payload: res.data})
     })
     .catch((err) => {
-      console.log(err.response.data);
-      dispatch({type: SET_ERRORS, payload: err.response.data})
+      console.log(err);
     })
 };
 
@@ -68,12 +67,23 @@ export const uploadProfileImage = (formData) => (dispatch) =>{
   dispatch({type: LOADING_USER});
   axios.post("http://localhost:5001/admasocial-media/us-central1/api/user/image", formData)
   .then(()=>{
-    //* Get user data to display in profile
-    dispatch(getUserData());
-
+dispatch(getUserData())
   })
   .catch(err=>{
 console.log(err.response.data)
+  })
+}
+
+//* Edit user profile
+
+export const editUserDetails = (userData) => (dispatch)=> {
+  dispatch({type: LOADING_USER})
+  axios.post("http://localhost:5001/admasocial-media/us-central1/api/user", userData)
+  .then(res=>{
+    dispatch(getUserData())
+  })
+  .catch(err=>{
+    console.log(err.response.data)
   })
 }
 //* Set authorization

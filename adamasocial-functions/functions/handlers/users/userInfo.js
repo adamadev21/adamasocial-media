@@ -3,8 +3,8 @@ const { reduceUserDetails } = require('../../utilities/helpers/validation');
 
 exports.addUserDetails = (req, res) => {
   let userDetails = reduceUserDetails(req.body);
-  db.doc(`/users/{req.user.handle}`)
-    .set(userDetails)
+  db.doc(`/users/${req.user.handle}`)
+    .update(userDetails)
     .then(() => {
       return res.json({ message: 'Details added successfully' });
     })
@@ -60,7 +60,7 @@ exports.getAuthenticatedUser = (req, res) => {
     .get()
     .then((doc) => {
       if (doc.exists) {
-        userData.userCredentials = doc.data();
+        userData.credentials = doc.data();
         return db
           .collection('likes')
           .where('userHandle', '==', req.user.handle)

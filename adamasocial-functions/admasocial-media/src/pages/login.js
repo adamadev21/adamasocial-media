@@ -5,9 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import logo from './logo.png';
-import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
-import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -21,16 +19,13 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
   },
-  button: {
-    marginTop: '10px',
-    color: 'primary',
-  },
   image: {
     marginTop: '50px',
     maxWidth: '60px',
     maxHeight: '60px',
   },
   button: {
+    color: 'primary',
     position: "relative",
     marginTop: "20px",
     maxHeight: "35px",
@@ -77,7 +72,7 @@ componentWillReceiveProps(nextProps){
     this.setState({ [event.target.name]: event.target.value });
   };
   render() {
-    const { classes, UI: {loading} } = this.props;
+    const { classes, } = this.props;
     const {errors} = this.state;
     return (
       <Grid container className={classes.form}>
@@ -117,7 +112,6 @@ componentWillReceiveProps(nextProps){
               color="primary"
               variant="contained"
               type="submit"
-              className={classes.button}
           
             >
               Sign In

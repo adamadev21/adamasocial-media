@@ -4,12 +4,12 @@ SET_AUTHENTICATED,
 SET_ERRORS,
 SET_UNAUTHENTICATED,
 SET_USER,
-LOADING_USER
+LOADING_USER, LIKE_SCREAM, UNLIKE_SCREAM
 } from '../../utils/types';
 
 const initialState = {
     authenticated: false,
-    userCredentials: {},
+    credentials: {},
     loading: false,
     likes: [],
     notifications: [],
@@ -34,6 +34,21 @@ const userReducer = (state=initialState, action)=>{
             return {
                 ...state, loading: true
             };
+        case LIKE_SCREAM:
+            return {
+                ...state,
+                likes: [
+                    ...state.likes, {
+                        userHandle:state.credentials.handle,
+                        screamId:action.payload.screamId
+                    }
+                ]
+            }
+        case UNLIKE_SCREAM:
+            return {
+                ...state,
+                likes: state.likes.filter(like=> like.screamId === action.payload.screamId)
+            }
         default:
             return state;
     }

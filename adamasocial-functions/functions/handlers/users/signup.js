@@ -36,7 +36,7 @@ exports.signup = (req, res) => {
       })
       .then((idToken) => {
         token = idToken;
-        const userCredentials = {
+        const credentials = {
           handle: newUser.handle,
           email: newUser.email,
           password: newUser.password,
@@ -44,7 +44,7 @@ exports.signup = (req, res) => {
           imageUrl : `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
           userId,
         };
-        return db.doc(`/users/${newUser.handle}`).set(userCredentials);
+        return db.doc(`/users/${newUser.handle}`).set(credentials);
       })
       .then(() => {
         return res.status(201).json({ token });
