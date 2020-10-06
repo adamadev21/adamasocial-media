@@ -1,28 +1,32 @@
-import React, { Component } from 'react';
-import withStyles from '@material-ui/styles/withStyles';
-import { Link } from 'react-router-dom';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import PropTypes from 'prop-types';
-import {Fragment} from 'react'
+import React, { Component , Fragment} from "react";
+import { Link } from "react-router-dom";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import PropTypes from "prop-types";
+//* MUI Stuff
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import withStyles from "@material-ui/styles/withStyles";
+
 //*Icons again!
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
-import ChatIcon from '@material-ui/icons/Chat';
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
+import ChatIcon from "@material-ui/icons/Chat";
 
 //* Redux yella
-import { connect } from 'react-redux';
-import { likeScream, unlikeScream } from '../redux/actions/dataActions';
+import { connect } from "react-redux";
+import { likeScream, unlikeScream } from "../redux/actions/dataActions";
+import  DeleteButton from "./DeleteButton";
+import  ScreamDialog from "./ScreamDialog";
+import LikeButton  from "./LikeButton";
 //*Extend dayjs to use relativetime
 dayjs.extend(relativeTime);
 const styles = {
   card: {
-    display: 'flex',
+    display: "flex",
     marginBottom: 20,
   },
   media: {
@@ -32,29 +36,13 @@ const styles = {
   },
   content: {
     padding: 25,
-    display: 'flex',
-    flexDirection: 'column',
-    textDecoration: 'none',
+    display: "flex",
+    flexDirection: "column",
+    textDecoration: "none",
   },
 };
 
 export class Scream extends Component {
-  likedScream = () => {
-    if (
-      this.props.user.likes &&
-      this.props.user.likes.find(
-        (like) => like.screamId === this.props.scream.screamId
-      )
-    ) {
-      return true;
-    } else return false;
-  };
-  likeScream = () => {
-    this.props.likeScream(this.props.scream.screamId);
-  };
-  unlikeScream = () => {
-    this.props.unlikeScream(this.props.scream.screamId);
-  };
   render() {
     const {
       classes,
@@ -67,21 +55,7 @@ export class Scream extends Component {
         likeCount,
         commentCount,
       },
-      user: { authenticated },
-    } = this.props;
-    const likeButton = !authenticated ? (
-      <Button component={Link} to="/login">
-        <FavoriteBorder color="primary" />
-      </Button>
-    ) : this.likedScream() ? (
-      <Button onClick={this.unlikeScream}>
-        <FavoriteIcon color='primary' />
-      </Button>
-    ) : (
-      <Button onClick={this.likeScream}>
-        <FavoriteBorder color='primary'/>
-      </Button>
-    );
+     } = this.props;
 
     return (
       <Card className={classes.card}>
@@ -95,21 +69,32 @@ export class Scream extends Component {
             variant="h5"
             component={Link}
             to={`user/${userHandle}`}
-            style={{ textDecoration: 'none' }}
+            style={{ textDecoration: "none" }}
+            color="primary"
           >
             @{userHandle}
           </Typography>
           <Typography color="black" variant="body2">
-            Posted: {dayjs(createdAt).fromNow()}{' '}
+            Posted: {dayjs(createdAt).fromNow()}{" "}
           </Typography>
           <Typography variant="body1">{body}</Typography>
-          <Fragment style={{display: "inline-flex", flexDirection: "row", flexWrap: 'no-wrap'}}>
-            {likeButton} <span>{likeCount}</span> Likes
+          <Typography
+            style={{
+              display: "inline-flex",
+              flexDirection: "row",
+              flexWrap: "no-wrap",
+              maxWidth: "90%",
+            }}
+          >
+            <DeleteButton screamId = {this.props.scream.screamId}/>
+            <LikeButton screamId={this.props.scream.screamId}/><span>{likeCount} {"   "}</span> Likes
             <Button>
               <ChatIcon color="primary" />
             </Button>
-            {commentCount}<span> Comments</span> 
-          </Fragment>
+            {commentCount} {"   "}
+            <span> Comments</span>
+          </Typography>
+          <ScreamDialog screamId ={this.props.scream.screamId} userHandle={this.props.scream.userHandle} />
         </CardContent>
       </Card>
     );
@@ -121,7 +106,7 @@ Scream.propTypes = {
   unlikeScream: PropTypes.func.isRequired,
   scream: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
   data: state.data,

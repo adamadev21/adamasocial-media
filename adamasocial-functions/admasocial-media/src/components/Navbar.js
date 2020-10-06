@@ -11,6 +11,7 @@ import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home';
 import Notifications from '@material-ui/icons/Notifications';
 import OfflineBolt from '@material-ui/icons/OfflineBolt';
+import PostScream from './PostScream';
 
 export class Navbar extends Component {
   render() {
@@ -23,7 +24,7 @@ export class Navbar extends Component {
               <Fragment>
                
                 <Button style={{color: "white"}}>
-                  <AddIcon />
+                  <PostScream />
                 </Button>
                  <Button component={Link} to="/" color="secondary" style={{color: "white"}}>
                   <HomeIcon />

@@ -29,7 +29,7 @@ store.dispatch(getUserData())
       ) : <p>The forest is quiet ...</p>
       ) : <p>Loading ...</p>
     return (
-      <Grid container spacing={14} alignItems="center">
+      <Grid container spacing={16} alignItems="center">
         <Grid item sm={8} xs={12} >
        {screamMarkup}
       

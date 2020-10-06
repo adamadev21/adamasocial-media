@@ -1,4 +1,4 @@
-import { CLEAR_ERRORS, LOADING_UI, SET_ERRORS } from "../../utils/types"
+import { CLEAR_ERRORS, LOADING_UI, SET_ERRORS , STOP_LOADING_UI} from "../../utils/types"
 
 const initialState = {
     loading: false,
@@ -19,6 +19,10 @@ const uiReducer = (state=initialState, action) => {
         case LOADING_UI:
             return {
                 ...state, loading: true,
+            };
+        case STOP_LOADING_UI:
+            return {
+                ...state, loading: false
             }
         default: 
             return state;

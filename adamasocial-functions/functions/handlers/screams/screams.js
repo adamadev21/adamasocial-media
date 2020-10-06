@@ -1,3 +1,4 @@
+const { debug } = require('firebase-functions/lib/logger');
 const { db, admin } = require('../../utilities/admin');
 
 exports.getAllScreams = (req, res) => {
@@ -12,10 +13,12 @@ exports.getAllScreams = (req, res) => {
           body: doc.data().body,
           userHandle: doc.data().userHandle,
           createdAt: doc.data().createdAt,
-          userImage: doc.data().userImage
+          userImage: doc.data().userImage,
+          likeCount:doc.data().likeCount,
+          commentCount: doc.data().commentCount
         });
       });
-      //! the .json makes the returned response into a json file
+      //*the .json makes the returned response into a json file
       return res.json(screams);
     })
     .catch((err) => {
@@ -35,6 +38,7 @@ exports.postScream = (req, res) => {
     likeCount: 0,
     commentCount: 0,
   };
+  console.log(req.user.imageUrl)
   admin
     .firestore()
     .collection('screams')
@@ -43,6 +47,8 @@ exports.postScream = (req, res) => {
       const resScream = newScream;
       resScream.screamId = doc.id;
       res.json(resScream);
+  db.doc(`screams/${doc.id}`).update({screamId: resScream.screamId})
+    
     })
     .catch((err) => {
       res.status(500).json({ error: 'Something went wrong!' });
@@ -96,7 +102,7 @@ exports.likeScream = (req, res) => {
       return res.status(500).json(err.code);
     });
 };
-//*Like a scream
+//*unLike a scream
 exports.unlikeScream = (req, res) => {
   let likeDocument = db
     .collection('likes')

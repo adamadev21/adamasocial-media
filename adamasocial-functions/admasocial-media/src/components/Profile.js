@@ -27,6 +27,8 @@ import Axios from 'axios';
 const styles = (theme) => ({
   paper: {
     padding: 20,
+    position: "absolute",
+    top: "10%"
   },
   profile: {
     '& .image-wrapper': {
@@ -34,7 +36,7 @@ const styles = (theme) => ({
       'position': 'relative',
       '& button': {
         position: 'absolute',
-        top: '80%',
+        top: '90%',
         left: '70%',
       },
     },

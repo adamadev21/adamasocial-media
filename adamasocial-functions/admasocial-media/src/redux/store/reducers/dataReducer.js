@@ -1,4 +1,4 @@
-import { LOADING_DATA, SET_SCREAMS, LIKE_SCREAM, UNLIKE_SCREAM } from "../../utils/types";
+import { LOADING_DATA, SET_SCREAMS, LIKE_SCREAM, UNLIKE_SCREAM, DELETE_SCREAM, POST_SCREAM, SET_SCREAM } from "../../utils/types";
 
 const initialState = {
    screams:[],
@@ -16,10 +16,30 @@ const dataReducer = (state=initialState, action)=>{
             return {
                 ...state, screams: action.payload,loading:false
             };
+        case POST_SCREAM:
+            return {
+                ...state, 
+                screams: [
+                    action.payload, ...state.screams
+                ]
+            }
+        case DELETE_SCREAM:
+            let index = state.screams.find(scream=> scream.screamId === action.payload.screamId);
+            state.screams.splice(index, 1);
+            return {
+                ...state
+            }
         case LIKE_SCREAM:
         case UNLIKE_SCREAM:
-            let index = state.scream.findIndex(scream=> scream.screamId === action.payload.screamId);
-            state.screams[index] = action.payload;
+            let indextoDel = state.screams.findIndex(scream=> scream.screamId === action.payload.screamId);
+            state.screams[indextoDel] = action.payload;
+            if (state.scream.screamId === action.payload.screamId) {
+                state.scream = action.payload;
+              };
+            case SET_SCREAM: 
+                return {
+                    ...state, scream: action.payload
+                }
             return {
 ...state
             };
