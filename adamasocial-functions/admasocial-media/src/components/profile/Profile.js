@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 //* Redux imports
-import { uploadProfileImage } from '../redux/actions/userActions';
-import { logoutUser, editUserDetails } from '../redux/actions/userActions';
+import { uploadProfileImage } from '../../redux/actions/userActions';
+import { logoutUser, editUserDetails } from '../../redux/actions/userActions';
 
 //*MUI stuff
 import Button from '@material-ui/core/Button';

@@ -1,4 +1,4 @@
-import { LOADING_DATA, SET_SCREAMS, LIKE_SCREAM, UNLIKE_SCREAM, DELETE_SCREAM, POST_SCREAM, SET_SCREAM } from "../../utils/types";
+import { SUBMIT_COMMENT, LOADING_DATA, SET_SCREAMS, LIKE_SCREAM, UNLIKE_SCREAM, DELETE_SCREAM, POST_SCREAM, SET_SCREAM, SUBMSUBMIT_COMMENT } from "../../utils/types";
 
 const initialState = {
    screams:[],
@@ -36,13 +36,17 @@ const dataReducer = (state=initialState, action)=>{
             if (state.scream.screamId === action.payload.screamId) {
                 state.scream = action.payload;
               };
-            case SET_SCREAM: 
-                return {
-                    ...state, scream: action.payload
-                }
+        case SET_SCREAM: 
             return {
-...state
-            };
+                ...state, scream: action.payload
+            }
+        case SUBMIT_COMMENT:
+            return {
+                ...state, scream: {
+                    ...state.scream, comments: [
+                    ...state.scream.comments,  action.payload
+                ]}
+            }
         default:
             return state
     }

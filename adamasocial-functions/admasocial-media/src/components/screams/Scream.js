@@ -15,13 +15,16 @@ import withStyles from "@material-ui/styles/withStyles";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 import ChatIcon from "@material-ui/icons/Chat";
-
-//* Redux yella
-import { connect } from "react-redux";
-import { likeScream, unlikeScream } from "../redux/actions/dataActions";
+//*Components
 import  DeleteButton from "./DeleteButton";
 import  ScreamDialog from "./ScreamDialog";
 import LikeButton  from "./LikeButton";
+import CommentButton from './CommentButton'
+
+//* Redux yella
+import { connect } from "react-redux";
+import { likeScream, unlikeScream } from "../../redux/actions/dataActions";
+
 //*Extend dayjs to use relativetime
 dayjs.extend(relativeTime);
 const styles = {
@@ -42,7 +45,7 @@ const styles = {
   },
 };
 
-export class Scream extends Component {
+class Scream extends Component {
   render() {
     const {
       classes,
@@ -55,6 +58,7 @@ export class Scream extends Component {
         likeCount,
         commentCount,
       },
+      user: {authenticated}
      } = this.props;
 
     return (
@@ -72,9 +76,9 @@ export class Scream extends Component {
             style={{ textDecoration: "none" }}
             color="primary"
           >
-            @{userHandle}
+            {userHandle}
           </Typography>
-          <Typography color="black" variant="body2">
+          <Typography color="textSecondary" variant="body2">
             Posted: {dayjs(createdAt).fromNow()}{" "}
           </Typography>
           <Typography variant="body1">{body}</Typography>
@@ -86,15 +90,13 @@ export class Scream extends Component {
               maxWidth: "90%",
             }}
           >
-            <DeleteButton screamId = {this.props.scream.screamId}/>
-            <LikeButton screamId={this.props.scream.screamId}/><span>{likeCount} {"   "}</span> Likes
-            <Button>
-              <ChatIcon color="primary" />
-            </Button>
-            {commentCount} {"   "}
+            <DeleteButton screamId = {screamId}/>
+            <LikeButton authenticated={authenticated}  screamId={screamId}/><span>{likeCount} {"   "}</span> Likes
+           <CommentButton authenticated={authenticated} />
+           {commentCount} {"   "}
             <span> Comments</span>
           </Typography>
-          <ScreamDialog screamId ={this.props.scream.screamId} userHandle={this.props.scream.userHandle} />
+          <ScreamDialog screamId ={screamId} userHandle={userHandle} />
         </CardContent>
       </Card>
     );

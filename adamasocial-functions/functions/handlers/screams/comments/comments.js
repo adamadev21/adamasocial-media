@@ -2,7 +2,6 @@ const { db } = require('../../../utilities/admin');
 
 exports.postComment = (req, res) => {
   let newComment = {};
-  console.log("body is", req.body)
   if (req.body.body.trim() === '') {
     return res.status(500).json({ body: 'Please enter a comment body' });
   }
@@ -23,10 +22,11 @@ exports.postComment = (req, res) => {
       return db.collection('comments')
       .add(newComment)
     })
-    .then(() => {
-      res
-        .status(500)
-        .json({ message: `comment ${newComment.body} has been created successfully` });
+    .then(data=>{
+      return res.status(200).json(data)
+    })
+    .catch(err=>{
+      console.error(err)
     });
 };
 

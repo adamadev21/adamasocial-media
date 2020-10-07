@@ -34,6 +34,8 @@ exports.postScream = (req, res) => {
     body: req.body.body,
     userHandle: req.user.handle,
     createdAt: new Date().toISOString(),
+    comments: [],
+    likes: [],
     userImage: req.user.imageUrl,
     likeCount: 0,
     commentCount: 0,

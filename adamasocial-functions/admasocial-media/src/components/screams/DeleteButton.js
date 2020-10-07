@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 //* Redux imports
 import {connect} from 'react-redux'
-import { deleteScream } from '../redux/actions/dataActions';
+import { deleteScream } from '../../redux/actions/dataActions';
 
 //*MUI stuff
 import DialogContent from '@material-ui/core/DialogContent';

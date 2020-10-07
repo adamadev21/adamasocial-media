@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 //* Redux imports
-import { postScream } from '../redux/actions/dataActions';
+import { editUserDetails } from '../../redux/actions/userActions';
 
 //*MUI stuff
 import DialogContent from '@material-ui/core/DialogContent';
@@ -13,7 +13,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/Button';
-import AddIcon from '@material-ui//icons/Add';
+import EditIcon from '@material-ui//icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
 
 const styles = {
@@ -27,24 +27,23 @@ const styles = {
     display: 'flex',
   },
 };
- class PostScream extends Component {
+export class EditUserDetails extends Component {
   state = {
-      open: false,
-      errors: {},
-      body: ""
+    location: '',
+    bio: '',
+    website: '',
+    open: false,
   };
-  componentWillReceiveProps(nextProps){
-      if (nextProps.UI.errors){
-          this.setState({ errors: nextProps.UI.errors});
-      }
-  }
   handleSubmit = (event) => {
-    const newScream = {
-      body: this.state.body,
+    const userDetails = {
+      location: this.state.location,
+      bio: this.state.bio,
+      website: this.state.website,
     };
-    this.props.postScream(newScream);
+    alert(this.state)
+    console.log(this.state)
+    this.props.editUserDetails(userDetails);
     this.handleClose();
-    console.log(newScream)
   event.preventDefault()
   };
   //*Open the form when the button is clicked
@@ -56,20 +55,34 @@ const styles = {
     event.preventDefault()
   };
   handleClose = () => {
-    this.setState({ open: false, errors: {}, body: '' });
+    this.setState({ open: false });
+  };
+  mapCredentialsToState = (credentials) => {
+    this.setState({
+      location: credentials.location ? credentials.location : '',
+      bio: credentials.bio ? credentials.bio : '',
+      website: credentials.website ? credentials.website : '',
+    });
   };
   handleOpen = () => {
-    this.setState({ open: true });
+    this.setState({
+      open: true,
+    });
+    this.mapCredentialsToState(this.props.credentials);
+  };
+  componentDidMount = () => {
+    console.log(this.props);
+    //       const {credentials} = this.props;
+    this.mapCredentialsToState(this.props.credentials);
   };
 
   render() {
-    const { classes, UI: {loading} } = this.props;
-    const {errors} = this.state;
+    const { classes } = this.props;
     return (
       <Fragment>
-        <Tooltip title="Add a scream" color="primary">
-          <IconButton  style={{color: "white"}} onClick={this.handleOpen}>
-            <AddIcon  /> 
+        <Tooltip title="Edit your Profile" color="primary">
+          <IconButton className="" onClick={this.handleOpen}>
+            <EditIcon /> <span>Edit Profile</span>
           </IconButton>
         </Tooltip>
 
@@ -80,25 +93,42 @@ const styles = {
           maxWidth="sm"
         >
           <DialogTitle>
-Post A New Scream          </DialogTitle>
+            You are changing your information. Make sure it is accurate
+          </DialogTitle>
           <DialogContent>
             <form className={classes.formField}>
               <TextField
                 id="standard-primary"
-                name="body"
-                label="New Scream"
+                name="bio"
+                label="Bio"
                 multiline
-                // helperText={errors}
-                error={errors ? true : false}
                 rows={3}
                 variant="standard"
-                value={this.state.body}
+                value={this.state.bio}
                 onChange={this.handleChange}
                 className={classes.textField}
-                placeholder="Scream, but not too loud!"
+                placeholder="Short description of yourself"
                 fullWidth
               />{' '}
-             
+              <TextField
+                id="standard-primary"
+                name="location"
+                label="Location"
+                variant="standard"
+                value={this.state.location}
+                onChange={this.handleChange}
+                className={classes.textField}
+                fullWidth
+              />
+              <TextField
+                id="standard-secondary"
+                name="website"
+                label="Website"
+                variant="standard"
+                value={this.state.website}
+                className={classes.textField}
+                onChange={this.handleChange}
+              />
             </form>
           </DialogContent>
           <DialogActions>
@@ -108,7 +138,7 @@ Post A New Scream          </DialogTitle>
             </Button>
             <Button onClick={this.handleSubmit} color="secondary">
               {' '}
-              Post
+              Save
             </Button>
           </DialogActions>
         </Dialog>
@@ -117,21 +147,21 @@ Post A New Scream          </DialogTitle>
   }
 }
 
-PostScream.propTypes = {
+EditUserDetails.propTypes = {
   classes: PropTypes.object.isRequired,
-  postScream: PropTypes.func.isRequired,
-  UI: PropTypes.object.isRequired,
+  editUserDetails: PropTypes.func.isRequired,
+  credentials: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => {
   console.log('state is', state);
   return {
-    UI: state.UI,
+    credentials: state.user.credentials,
   };
 };
 const mapActionsToProps = {
-  postScream,
+  editUserDetails,
 };
 export default connect(
   mapStateToProps,
   mapActionsToProps
-)(withStyles(styles)(PostScream));
+)(withStyles(styles)(EditUserDetails));

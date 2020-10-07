@@ -1,4 +1,4 @@
-import { STOP_LOADING_UI, DELETE_SCREAM, LIKE_SCREAM, LOADING_DATA, LOADING_UI, POST_SCREAM, SET_ERRORS, SET_SCREAM , SET_SCREAMS, UNLIKE_SCREAM} from "../utils/types"
+import {  STOP_LOADING_UI, DELETE_SCREAM, LIKE_SCREAM, LOADING_DATA, LOADING_UI, POST_SCREAM, SET_ERRORS, SET_SCREAM , SET_SCREAMS, UNLIKE_SCREAM, SUBMIT_COMMENT} from "../utils/types"
 import axios from 'axios'
 //*Get all screams
 export const getScreams = ()=> (dispatch)=>{
@@ -70,7 +70,7 @@ axios.post("http://localhost:5001/admasocial-media/us-central1/api/screams", new
     dispatch({type: POST_SCREAM,  payload:res.data});
 })
 .catch(err=>{
-    dispatch({type: SET_ERRORS, payload:err.response.data})
+    console.log(err)
 })
 }
 
@@ -80,10 +80,25 @@ export const getOneScream =(screamId) => (dispatch)=>{
     .then(res=>{
         dispatch({type: SET_SCREAM, payload: res.data})
         dispatch({type: STOP_LOADING_UI})
-
+console.log(res.data)
     }
     )
     .catch(err=>{
         console.log(err)
     })
+}
+
+//*Comment on a scream
+
+export const commentScream = (screamId, newComment) => dispatch => {
+dispatch({type: LOADING_UI});
+axios.post(`http://localhost:5001/admasocial-media/us-central1/api/scream/${screamId}/comment`, newComment)
+.then(res=>{
+    dispatch({type: SUBMIT_COMMENT, payload: res.data})
+    dispatch({type:STOP_LOADING_UI})
+    dispatch(getOneScream())
+})
+.catch(err=>{
+    console.log(err)
+})
 }

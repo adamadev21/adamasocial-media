@@ -5,13 +5,13 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { logoutUser } from '../redux/actions/userActions';
+import { logoutUser } from '../../redux/actions/userActions';
 //* Icons
 import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home';
 import Notifications from '@material-ui/icons/Notifications';
 import OfflineBolt from '@material-ui/icons/OfflineBolt';
-import PostScream from './PostScream';
+import PostScream from '../screams/PostScream';
 
 export class Navbar extends Component {
   render() {

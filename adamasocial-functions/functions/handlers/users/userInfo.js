@@ -150,7 +150,6 @@ exports.getScream = (req, res) => {
   db.doc(`/screams/${req.params.screamId}`)
     .get()
     .then((doc) => {
-        console.log(doc);
       if (!doc.exists) {
         return res.status(404).json({ message: 'Doc not Found' });
       } 
@@ -164,7 +163,6 @@ exports.getScream = (req, res) => {
     })
     .then((data) => {
       screamData.comments = [];
-      console.log(screamData)
       data.forEach((doc) => {
         screamData.comments.push(doc.data());
       });

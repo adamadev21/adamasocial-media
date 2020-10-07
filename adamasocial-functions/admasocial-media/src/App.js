@@ -6,7 +6,7 @@ import axios from 'axios'
 import Home from './pages/home';
 import Signup from './pages/signup';
 import Login from './pages/login';
-import Navbar from './components/Navbar';
+import Navbar from './components/layout/Navbar';
 
 //*Material ui stuff
 

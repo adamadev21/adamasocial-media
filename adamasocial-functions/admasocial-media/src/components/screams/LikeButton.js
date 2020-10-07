@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Button from "@material-ui/core/Button";
-import { likeScream, unlikeScream } from "../redux/actions/dataActions";
+import { likeScream, unlikeScream } from "../../redux/actions/dataActions";
 import PropTypes from 'prop-types'
 //*Icons again!
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -26,7 +26,7 @@ export class LikeButton extends Component {
         this.props.unlikeScream(this.props.screamId);
       };
     render() {
-        const {authenticated} = this.props.user
+        const {authenticated} = this.props;
         const likeButton = !authenticated ? (
             <Link  to="/login">
      <Button >

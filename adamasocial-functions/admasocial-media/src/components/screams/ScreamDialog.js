@@ -22,7 +22,13 @@ import ChatIcon from "@material-ui/icons/Chat";
 
 //* Redux yella
 import { connect } from "react-redux";
-import { getOneScream, unlikeScream } from "../redux/actions/dataActions";
+import { getOneScream, unlikeScream } from "../../redux/actions/dataActions";
+import Comments from "./Comments";
+import store from "../../redux/store/store";
+import LikeButton  from "./LikeButton";
+import CommentButton from "./CommentButton";
+import CommentForm from "./CommentForm";
+
 //*Extend dayjs to use relativetime
 dayjs.extend(relativeTime);
 const styles = {
@@ -54,22 +60,29 @@ overflowY: "unset"
      left: "90%"
  }
 };
-
-export class ScreamDialog extends Component {
+ class ScreamDialog extends Component {
   state = {
     open: false,
   };
+
   handleOpen = () => {
     this.setState({ open: true });
-    this.props.getOneScream(this.props.screamId);
   };
   handleClose = () => {
     this.setState({ open: false });
   };
+  componentWillMount(){
+    
+    console.log(this.props.scream)
+  }
+  componentDidMount(){
+    this.props.getOneScream(this.props.screamId);
+
+ }
   render() {
     const {
       classes,
-      scream: { screamId, body, userImage, userHandle, createdAt },
+      scream: { screamId, body, userImage, userHandle, createdAt , comments, likeCount, commentCount},
       UI: { loading },
     } = this.props;
     const dialogMarkup = loading ? (
@@ -78,11 +91,11 @@ export class ScreamDialog extends Component {
 
         </div>
     ) : (
-        <Grid  container spacing={16}>
+        <Grid style={{scrollBehavior: "unset", scrollMarginLeft: "100px", display: "block"}} container spacing={2}>
 <Grid item sm={5}>
     <img src={userImage} className={classes.profileImage}/>
 </Grid>
-<Grid item sm={7}>
+<Grid item sm={7} direction='column'>
 <Typography 
 variant ='h5'
 color = 'primary'
@@ -98,9 +111,17 @@ to = { `/user/${userHandle}`} >
 <Typography variant = "body1">
     {body}
 </Typography>
+<Fragment >
+              <LikeButton screamId={screamId}/> {likeCount} Likes
+              <CommentButton/> {commentCount} Comments
+            </Fragment>
+            <CommentForm screamId={screamId}/>
+            <br/>
+         
 </Grid>
         </Grid>
-    )
+
+    ) 
         return (
       <Fragment>
         <Tooltip title="Read more ..." color="primary">
@@ -121,7 +142,12 @@ to = { `/user/${userHandle}`} >
           </IconButton>
         </Tooltip> 
           <DialogContent className={classes.dialogContent}>
+      
+            {/* //*This displays the recent comments if any */}
               {dialogMarkup}
+   <Comments screamId={screamId} comments={comments}/>
+
+
           </DialogContent>
         </Dialog>
       </Fragment>
@@ -135,10 +161,14 @@ ScreamDialog.propTypes = {
   scream: PropTypes.object.isRequired,
   userHandle: PropTypes.string.isRequired,
 };
-const mapStateToProps = (state) => ({
-  scream: state.data.scream,
-  UI: state.UI,
-});
+const mapStateToProps = (state) => {
+  console.log("data is", state.data);
+  
+  return {
+    scream: state.data.scream,
+    UI: state.UI,
+  }
+}
 const mapActionsToProps = {
   getOneScream,
 };
