@@ -41,7 +41,7 @@ const errors = this.state.errors
             helperText ={errors.comment? errors.comment : null}
             fullWidth
           />
-          <Button variant = "contained" color="primary" onClick={this.handleSubmit} style={{postion: "absolute", left: "36%", marginTop: "5px"}}>
+          <Button type="submit" variant = "contained" color="primary" style={{postion: "absolute", left: "36%", marginTop: "5px"}}>
               Submit
           </Button>
         </form>

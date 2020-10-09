@@ -7,11 +7,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logoutUser } from '../../redux/actions/userActions';
 //* Icons
-import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home';
-import Notifications from '@material-ui/icons/Notifications';
 import OfflineBolt from '@material-ui/icons/OfflineBolt';
 import PostScream from '../screams/PostScream';
+import NotificationIcon  from './NotificationIcon';
 
 export class Navbar extends Component {
   render() {
@@ -30,14 +29,7 @@ export class Navbar extends Component {
                   <HomeIcon />
                 </Button>
                 <Button style={{color: "white"}}>
-                  <Notifications />
-                </Button>
-                <Button
-                  color="secondary"
-                  onClick={this.props.logoutUser}
-                  style={{color: "white"}}
-                >
-                  <OfflineBolt />
+                  <NotificationIcon />
                 </Button>
               </Fragment>
             ) : (

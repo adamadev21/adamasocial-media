@@ -96,7 +96,7 @@ export class EditUserDetails extends Component {
             You are changing your information. Make sure it is accurate
           </DialogTitle>
           <DialogContent>
-            <form className={classes.formField}>
+            <form className={classes.formField}  style={{display: "flex", flexDirection: "column"}}>
               <TextField
                 id="standard-primary"
                 name="bio"
@@ -128,6 +128,7 @@ export class EditUserDetails extends Component {
                 value={this.state.website}
                 className={classes.textField}
                 onChange={this.handleChange}
+                fullWidth
               />
             </form>
           </DialogContent>

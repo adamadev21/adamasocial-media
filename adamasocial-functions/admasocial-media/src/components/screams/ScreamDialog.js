@@ -13,7 +13,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import withStyles from "@material-ui/styles/withStyles";
-import { CircularProgress, Grid, } from "@material-ui/core";
+import { CircularProgress, Grid } from "@material-ui/core";
 
 //*Icons again!
 import CloseIcon from "@material-ui/icons/Close";
@@ -25,108 +25,123 @@ import { connect } from "react-redux";
 import { getOneScream, unlikeScream } from "../../redux/actions/dataActions";
 import Comments from "./Comments";
 import store from "../../redux/store/store";
-import LikeButton  from "./LikeButton";
+import LikeButton from "./LikeButton";
 import CommentButton from "./CommentButton";
 import CommentForm from "./CommentForm";
 
 //*Extend dayjs to use relativetime
 dayjs.extend(relativeTime);
-const styles = {
- profileImage: {
-     maxWidth: 200,
-     height: 200,
-     borderRadius: "50%",
-     objectFit: "cover"
- },
- hr: {
-     display: "none",
-     margin: 4
- },
- dialogContent: {
-padding: 20,
-overflowY: "unset"
- },
- expandButton: {
-    position: 'absolute',
-    left: '90%'
+const styles = (theme) => ({
+  profileImage: {
+    maxWidth: 200,
+    height: 200,
+    borderRadius: "50%",
+    objectFit: "cover",
+  },
+  dialogContent: {
+    padding: 20,
+  },
+  closeButton: {
+    position: "absolute",
+    left: "90%",
+  },
+  expandButton: {
+    position: "absolute",
+    left: "90%",
   },
   spinnerDiv: {
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 50,
-    marginBottom: 50
+    marginBottom: 50,
   },
- closeButton:{
-     positon: "absolute",
-     left: "90%"
- }
-};
- class ScreamDialog extends Component {
+  hr: {
+    display:"none",
+    margin: 4
+  }
+});
+class ScreamDialog extends Component {
   state = {
     open: false,
+    oldPath:' ',
+    currPath:''
   };
 
-  handleOpen = () => {
-    this.setState({ open: true });
+  handleOpen = () => {     
+    let oldPath = window.location.pathname;
+    const {userHandle, screamId} = this.props;
+    let currPath = `/users/${userHandle}/scream/${screamId}`;
+
+    this.setState({ open: true, oldPath, currPath});
+    window.history.pushState(null, null, currPath)
+    this.props.getOneScream(this.props.screamId);
   };
   handleClose = () => {
-    this.setState({ open: false });
+    window.history.pushState(null,null, this.state.oldPath);
+    if(this.state.oldPath===this.state.currPath) this.setState({oldPath: `/users/${this.props.userHandle}`})
+    window.history.pushState(null, null, this.state.oldPath)
+    this.setState({open:false})
   };
-  componentWillMount(){
-    
-    console.log(this.props.scream)
+  componentDidMount() {
+    if (this.props.openDialog) {
+      this.handleOpen();
+    }
   }
-  componentDidMount(){
-    this.props.getOneScream(this.props.screamId);
-
- }
   render() {
     const {
       classes,
-      scream: { screamId, body, userImage, userHandle, createdAt , comments, likeCount, commentCount},
+      scream: {
+        screamId,
+        body,
+        userImage,
+        userHandle,
+        createdAt,
+        comments,
+        likeCount,
+        commentCount,
+      },
       UI: { loading },
     } = this.props;
     const dialogMarkup = loading ? (
-        <div className={classes.spinnerDiv}>
-        <CircularProgress size={200}  thickness={2}/>
-
-        </div>
+      <div className={classes.spinnerDiv}>
+        <CircularProgress size={200} thickness={2} />
+      </div>
     ) : (
-        <Grid style={{scrollBehavior: "unset", scrollMarginLeft: "100px", display: "block"}} container spacing={2}>
-<Grid item sm={5}>
-    <img src={userImage} className={classes.profileImage}/>
-</Grid>
-<Grid item sm={7} direction='column'>
-<Typography 
-variant ='h5'
-color = 'primary'
-component ={ Link}
-to = { `/user/${userHandle}`} >
-    @{userHandle}
-</Typography>
-<hr className={classes.hr}/>
-<Typography variant ='body2' color='dark'  >
-{dayjs(createdAt).format("h:mm a, MMM DD YYYY")}
-</Typography>
-<hr className={classes.hr}/>
-<Typography variant = "body1">
-    {body}
-</Typography>
-<Fragment >
-              <LikeButton screamId={screamId}/> {likeCount} Likes
-              <CommentButton/> {commentCount} Comments
-            </Fragment>
-            <CommentForm screamId={screamId}/>
-            <br/>
-         
-</Grid>
+      <Grid
+        container
+        spacing={16}
+      >
+        <Grid item sm={5}>
+          <img src={userImage} className={classes.profileImage} />
         </Grid>
-
-    ) 
-        return (
+        <Grid item sm={7} direction="column">
+          <Typography
+            variant="h5"
+            color="primary"
+            component={Link}
+            to={`/user/${userHandle}`}
+          >
+            @{userHandle}
+          </Typography>
+          <hr className={classes.hr} />
+          <Typography variant="body2" color="textSecondary">
+            {dayjs(createdAt).format("h:mm a, MMM DD YYYY")}
+          </Typography>
+          <hr className={classes.hr} />
+          <Typography variant="body1">{body}</Typography>
+          <Fragment>
+            <LikeButton screamId={screamId} /> {likeCount} Likes
+            <CommentButton /> {commentCount} Comments
+          </Fragment>
+          <CommentForm screamId={screamId} />
+          <br />
+        </Grid>
+      </Grid>
+    );
+    return (
       <Fragment>
         <Tooltip title="Read more ..." color="primary">
           <IconButton onClick={this.handleOpen}>
-            <UnfoldMore className={classes.expandButton}  /> 
+            <UnfoldMore className={classes.expandButton} />
           </IconButton>
         </Tooltip>
 
@@ -137,17 +152,17 @@ to = { `/user/${userHandle}`} >
           maxWidth="sm"
         >
           <Tooltip title="Close ..." color="primary">
-          <IconButton className={classes.closeButton} onClick={this.handleClose}>
-            <CloseIcon />
-          </IconButton>
-        </Tooltip> 
+            <IconButton
+              className={classes.closeButton}
+              onClick={this.handleClose}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Tooltip>
           <DialogContent className={classes.dialogContent}>
-      
             {/* //*This displays the recent comments if any */}
-              {dialogMarkup}
-   <Comments screamId={screamId} comments={comments}/>
-
-
+            {dialogMarkup}
+            <Comments screamId={screamId} comments={comments ? comments : []} />
           </DialogContent>
         </Dialog>
       </Fragment>
@@ -155,6 +170,7 @@ to = { `/user/${userHandle}`} >
   }
 }
 ScreamDialog.propTypes = {
+  openDialog: PropTypes.bool,
   classes: PropTypes.object.isRequired,
   screamId: PropTypes.string.isRequired,
   UI: PropTypes.object.isRequired,
@@ -163,12 +179,12 @@ ScreamDialog.propTypes = {
 };
 const mapStateToProps = (state) => {
   console.log("data is", state.data);
-  
+
   return {
     scream: state.data.scream,
     UI: state.UI,
-  }
-}
+  };
+};
 const mapActionsToProps = {
   getOneScream,
 };

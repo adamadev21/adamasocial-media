@@ -72,7 +72,7 @@ class Scream extends Component {
           <Typography
             variant="h5"
             component={Link}
-            to={`user/${userHandle}`}
+            to={`/users/${userHandle}`}
             style={{ textDecoration: "none" }}
             color="primary"
           >
@@ -96,13 +96,14 @@ class Scream extends Component {
            {commentCount} {"   "}
             <span> Comments</span>
           </Typography>
-          <ScreamDialog screamId ={screamId} userHandle={userHandle} />
+          <ScreamDialog screamId ={screamId} userHandle={userHandle} openDialog={this.props.openDialog}/>
         </CardContent>
       </Card>
     );
   }
 }
 Scream.propTypes = {
+  openDialog: PropTypes.bool,
   user: PropTypes.object.isRequired,
   likeScream: PropTypes.func.isRequired,
   unlikeScream: PropTypes.func.isRequired,

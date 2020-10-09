@@ -4,7 +4,7 @@ SET_AUTHENTICATED,
 SET_ERRORS,
 SET_UNAUTHENTICATED,
 SET_USER,
-LOADING_USER, LIKE_SCREAM, UNLIKE_SCREAM
+LOADING_USER, LIKE_SCREAM, UNLIKE_SCREAM, MARK_NOTIFICATIONS_READ
 } from '../../utils/types';
 
 const initialState = {
@@ -48,7 +48,9 @@ const userReducer = (state=initialState, action)=>{
             return {
                 ...state,
                 likes: state.likes.filter(like=> like.screamId !== action.payload.screamId)
-            }
+            };
+            case MARK_NOTIFICATIONS_READ: 
+             state.notifications.forEach(not => not.read = true)
         default:
             return state;
     }

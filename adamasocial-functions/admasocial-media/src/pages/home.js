@@ -1,57 +1,57 @@
-import React, { Component } from 'react';
-import Grid from '@material-ui/core/Grid/';
-import Scream  from '../components/screams/Scream';
-import Profile from  '../components/profile/Profile'
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux';
-import {getScreams} from '../redux/actions/dataActions';
-import store from '../redux/store/store';
-import { getUserData } from '../redux/actions/userActions';
+import React, { Component } from "react";
+import Grid from "@material-ui/core/Grid/";
+import Scream from "../components/screams/Scream";
+import Profile from "../components/profile/Profile";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { getScreams } from "../redux/actions/dataActions";
+import store from "../redux/store/store";
+import { getUserData } from "../redux/actions/userActions";
 export class Home extends Component {
-state = {
-    screams: null
-}
+  state = {
+    screams: null,
+  };
 
-//loadad screa
-componentDidMount() {
-store.dispatch(getScreams())
-store.dispatch(getUserData())
-    }
+  //loadad screa
+  componentDidMount() {
+    store.dispatch(getScreams());
+    store.dispatch(getUserData());
+  }
   render() {
-    const {screams, loading } =this.props.data;
-      let screamMarkup = !loading? (
-        screams ? (
-          screams.map(scream=>{
-              return (
-<Scream key={scream.sreamId} scream={scream}/>
-              )
-          })
-      ) : <p>The forest is quiet ...</p>
-      ) : <p>Loading ...</p>
+    const { screams, loading } = this.props.data;
+    let screamMarkup = !loading ? (
+      screams ? (
+        screams.map((scream) => {
+          return <Scream key={scream.sreamId} scream={scream} />;
+        })
+      ) : (
+        <p>The forest is quiet ...</p>
+      )
+    ) : (
+      <p>Loading ...</p>
+    );
     return (
       <Grid container spacing={16} alignItems="center">
-        <Grid item sm={8} xs={12} >
-       {screamMarkup}
-      
+        <Grid item sm={8} xs={12}>
+          {screamMarkup}
         </Grid>
         <Grid item sm={4} xs={12}>
-<Profile />
-      
+          <Profile />
         </Grid>
       </Grid>
     );
   }
 }
 
-Home.propTypes ={
+Home.propTypes = {
   data: PropTypes.object.isRequired,
-  getScreams: PropTypes.func.isRequired
-}
- const mapStateToProps =(state)=>({
-  data: state.data
-})
+  getScreams: PropTypes.func.isRequired,
+};
+const mapStateToProps = (state) => ({
+  data: state.data,
+});
 const mapActionsToProps = {
-  getScreams
-}
+  getScreams,
+};
 
 export default connect(mapStateToProps, mapActionsToProps)(Home);

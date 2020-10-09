@@ -1,11 +1,11 @@
 import axios from 'axios';
 import {
   LOADING_UI,
-  SET_AUTHENTICATED,
+MARK_NOTIFICATIONS_READ,
   SET_ERRORS,
   CLEAR_ERRORS,
   SET_UNAUTHENTICATED,
-  SET_USER, LOADING_USER
+  SET_USER, LOADING_USER, SET_SCREAMS
 } from '../utils/types';
 
 export const loginUser = (userData, history) => (dispatch) => {
@@ -86,6 +86,19 @@ export const editUserDetails = (userData) => (dispatch)=> {
     console.log(err.response.data)
   })
 }
+
+//*Get user details
+export const getUserDetails = (userHandle)=>(dispatch)=>{
+  dispatch({type: LOADING_UI});
+  axios.get(`http://localhost:5001/admasocial-media/us-central1/api/user/${userHandle}`)
+  .then(res=>{
+    dispatch({type: SET_SCREAMS, payload: res.data.screams})
+  })
+  .catch(err=>{
+    console.log(err);
+    dispatch({type: SET_SCREAMS, payload: null})
+  })
+}
 //* Set authorization
 
 const setAuthorization = (token) => {
@@ -101,3 +114,10 @@ export const logoutUser = () => (dispatch) => {
   delete axios.defaults.headers.common['Authorization'];
   dispatch({ type: SET_UNAUTHENTICATED });
 };
+
+export  const markNotificationsRead = (notificationIds)=> (dispatch)=>{
+  axios.post("http://localhost:5001/admasocial-media/us-central1/notifications",  notificationIds)
+  .then(()=>{
+    dispatch({type: MARK_NOTIFICATIONS_READ});
+  }).catch(err=>console.log(err))
+}

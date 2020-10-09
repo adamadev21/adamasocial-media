@@ -3,87 +3,72 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { commentScream } from "../../redux/actions/dataActions";
+import withStyles from '@material-ui/styles/withStyles'
 import PropTypes from "prop-types";
 //*Icons again!
 import ChatIcon from "@material-ui/icons/Chat";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 import { Grid, Typography } from "@material-ui/core";
+
 import dayjs from "dayjs";
-const classes = {
+const styles = {
   userImage: {
-    maxWidth: 150,
-    height: 150,
+    maxWidth: "100%",
+    height: 100,
     borderRadius: "50%",
     fitContent: "cover",
   },
   content: {
-      positon: "absolute",
-      right: "90%",
-      marginRight: "10%"
+marginLeft: 20
 
+  },
+  invisibleSeparator:{
+    display: "none",
+    margin:4
   }
 };
 class Comments extends Component {
-  //**Lets keep the comments in the state of the component**/
-  state = {
-    comments: [],
-  };
-  //*DEBUG Console log the comments props after the component is mounted to see why they are not displayed
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    console.log("DEBUG", this.props.comments);
-    //*This works fine. I have the comments
-    //* let us update the state when the component mounts
-    if (nextProps.comments) {
-      this.setState({
-        comments: this.props.comments,
-      });
-    }
-  }
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.screams !== this.props.screams) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  commentScream = () => {
-    this.props.commentScream(this.props.screamId);
-  };
-  render() {
-    const comments = this.props.comments;
 
+  render() {
+    const classes= this.props.classes
+    const comments = this.props.comments;
     return (
-      <Grid container spacing={2}>
-        {comments.map((comment) => (
+      <Grid container >
+        {comments.map((comment, index) => (
           <Fragment key={comment.createdAt}>
-            <Grid item sm={12} container>
-              <Grid container spacing={2} alignItems="center">
-                <Grid item sm={5}>
+            <Grid item sm={12} >
+              <Grid container alignItems="center" >
+                <Grid item sm={2}>
                   <img
                     src={comment.userImage}
                     alt="user image"
-                    style={classes.userImage}
+                    className={classes.userImage}
                   />
                 </Grid>
-                <Grid item sm={5} style={classes.content} noWrap direction='column'>
-                  <Typography noWrap
-                    component={Link}
-                    to={`/users/${comment.userHandle}`}
-                    variant = 'h6'
-                    color = 'primary'
-                  >
-                    {comment.userHandle}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    {dayjs(comment.createdAt).format("h:mm a, MMM DD YYYY")}
-                  </Typography>
-                  <Typography variant="body1">{comment.body}</Typography>
+                <Grid item sm={9} >
+                <div className={classes.content}>
+                      <Typography
+                        variant="h5"
+                        component={Link}
+                        to={`/users/${comment.userHandle}`}
+                        color="primary"
+                      >
+                        {comment.userHandle}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {dayjs(comment.createdAt).format('h:mm a, MMMM DD YYYY')}
+                      </Typography>
+                      <hr className={classes.invisibleSeparator} />
+                      <Typography variabnt="body1">{comment.body}</Typography>
+                    </div>
                 </Grid>
               </Grid>
               <hr  />
 
             </Grid>
-            <hr style={{margin: "4", display: "inline-block"}}/>
+            {index !== comments.length - 1 && (
+                <hr className={classes.visibleSeparator} />
+              )}
 
           </Fragment>
           
@@ -93,8 +78,7 @@ class Comments extends Component {
   }
 }
 Comments.propTypes = {
-  user: PropTypes.object.isRequired,
   comments: PropTypes.array.isRequired,
 };
 
-export default Comments;
+export default withStyles(styles)(Comments);

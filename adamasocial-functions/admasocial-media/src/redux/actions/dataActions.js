@@ -80,7 +80,6 @@ export const getOneScream =(screamId) => (dispatch)=>{
     .then(res=>{
         dispatch({type: SET_SCREAM, payload: res.data})
         dispatch({type: STOP_LOADING_UI})
-console.log(res.data)
     }
     )
     .catch(err=>{
@@ -96,7 +95,6 @@ axios.post(`http://localhost:5001/admasocial-media/us-central1/api/scream/${scre
 .then(res=>{
     dispatch({type: SUBMIT_COMMENT, payload: res.data})
     dispatch({type:STOP_LOADING_UI})
-    dispatch(getOneScream())
 })
 .catch(err=>{
     console.log(err)
