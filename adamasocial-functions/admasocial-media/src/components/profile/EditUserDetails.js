@@ -40,8 +40,6 @@ export class EditUserDetails extends Component {
       bio: this.state.bio,
       website: this.state.website,
     };
-    alert(this.state)
-    console.log(this.state)
     this.props.editUserDetails(userDetails);
     this.handleClose();
   event.preventDefault()
@@ -71,7 +69,6 @@ export class EditUserDetails extends Component {
     this.mapCredentialsToState(this.props.credentials);
   };
   componentDidMount = () => {
-    console.log(this.props);
     //       const {credentials} = this.props;
     this.mapCredentialsToState(this.props.credentials);
   };
@@ -154,7 +151,6 @@ EditUserDetails.propTypes = {
   credentials: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => {
-  console.log('state is', state);
   return {
     credentials: state.user.credentials,
   };

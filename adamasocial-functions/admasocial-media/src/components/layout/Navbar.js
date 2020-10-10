@@ -22,9 +22,8 @@ export class Navbar extends Component {
             {authenticated ? (
               <Fragment>
                
-                <Button style={{color: "white"}}>
                   <PostScream />
-                </Button>
+               
                  <Button component={Link} to="/" color="secondary" style={{color: "white"}}>
                   <HomeIcon />
                 </Button>

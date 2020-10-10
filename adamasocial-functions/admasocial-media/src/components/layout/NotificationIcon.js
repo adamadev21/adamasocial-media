@@ -43,7 +43,7 @@ export class NotificationIcon extends Component {
       notifications.filter((not) => not.read === false).length > 0
         ? (notificationsMarkup = (
             <Badge
-              ancorEl={ancorEl}
+              anchor={ancorEl}
               badgeContent={
                 notifications.filter((not) => not.read === false).length
               }
@@ -73,6 +73,7 @@ export class NotificationIcon extends Component {
                 component={Link}
                 to={`/users/${not.sender}/scream/${not.screamId}`}
                 variant="body1"
+                style={{textDecoration: "none"}}
               >
                 {not.sender} {verb} your scream {time}
               </Typography>
@@ -87,18 +88,21 @@ export class NotificationIcon extends Component {
         <Tooltip title=" Notifications" placement="top">
           <IconButton
             aria-owns={ancorEl ? "simple-menu" : undefined}
-            aria-haspopup
+            aria-haspopup="true"
             onClick={this.handleOpen}
           >{notificationsMarkup}</IconButton>
         </Tooltip>
+        <div style={{position: "absolute", top: "30%"}}>
         <Menu
-          ancorEl={ancorEl}
+          anchorEl={ancorEl}
           open={Boolean(ancorEl)}
-          onclose={this.handleClose}
+          onClose={this.handleClose}
           onEntered={this.handleNotifications}
         >
           {notList}
         </Menu>
+        </div>
+
       </Fragment>
     );
   }

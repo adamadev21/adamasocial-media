@@ -47,7 +47,8 @@ const styles = (theme) => ({
   },
   expandButton: {
     position: "absolute",
-    left: "90%",
+    left: "60%",
+    top: "22.5%"
   },
   spinnerDiv: {
     textAlign: "center",
@@ -57,7 +58,7 @@ const styles = (theme) => ({
   hr: {
     display:"none",
     margin: 4
-  }
+  },
 });
 class ScreamDialog extends Component {
   state = {
@@ -88,6 +89,7 @@ class ScreamDialog extends Component {
   }
   render() {
     const {
+      authenticated,
       classes,
       scream: {
         screamId,
@@ -129,7 +131,7 @@ class ScreamDialog extends Component {
           <hr className={classes.hr} />
           <Typography variant="body1">{body}</Typography>
           <Fragment>
-            <LikeButton screamId={screamId} /> {likeCount} Likes
+            <LikeButton screamId={screamId}authenticated={authenticated} /> {likeCount} Likes
             <CommentButton /> {commentCount} Comments
           </Fragment>
           <CommentForm screamId={screamId} />
@@ -140,7 +142,7 @@ class ScreamDialog extends Component {
     return (
       <Fragment>
         <Tooltip title="Read more ..." color="primary">
-          <IconButton onClick={this.handleOpen}>
+          <IconButton onClick={this.handleOpen} className={classes.expandButton}>
             <UnfoldMore className={classes.expandButton} />
           </IconButton>
         </Tooltip>
@@ -178,7 +180,6 @@ ScreamDialog.propTypes = {
   userHandle: PropTypes.string.isRequired,
 };
 const mapStateToProps = (state) => {
-  console.log("data is", state.data);
 
   return {
     scream: state.data.scream,

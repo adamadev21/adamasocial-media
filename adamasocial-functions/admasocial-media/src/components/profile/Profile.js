@@ -19,9 +19,10 @@ import LocationOn from '@material-ui/icons/LocationOn';
 import LinkIcon from '@material-ui/icons/Link';
 import CalendarToday from '@material-ui/icons/CalendarToday';
 import EditIcon from '@material-ui/icons/Edit';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/SettingsPower';
 import EditUserDetails  from './EditUserDetails';
 import Axios from 'axios';
+import ProfileSkeleton from '../../util/ProfileSkeleton';
 
 //* style classes
 const styles = (theme) => ({
@@ -74,10 +75,6 @@ const styles = (theme) => ({
   },
 });
 export class Profile extends Component {
-  componentDidMount() {
-    console.log("");
-    console.log(localStorage.FBIdToken)
-  }
 
   handleImageChange = (event) => {
     const image = event.target.files[0];
@@ -121,7 +118,7 @@ export class Profile extends Component {
                 hidden="hidden"
                 id="edit-image"
               />
-              <Tooltip title="Edit profile image" color="green" position="top">
+              <Tooltip title="Edit profile image" position="top">
                 <Button>
                   <EditIcon
                     color="primary"
@@ -133,7 +130,7 @@ export class Profile extends Component {
             </div>
             <hr />
             <div className="profile-details">
-              <MuiLink variant="h5" to={`/user/${handle}`} Component={Link}>
+              <MuiLink variant="h5" to={`/user/${handle}`} component={Link}>
                 @{handle}
               </MuiLink>
               <hr />
@@ -156,17 +153,18 @@ export class Profile extends Component {
               </Fragment>
             </div>
             <Fragment>
+            <EditUserDetails/>
               <Tooltip title="Logout" color="primary">
                 <Button
                   variant="contained"
-                  color="primary"
+                  color="secondary"
                   onClick={this.handleLogout}
                 >
-                  <KeyboardArrowLeft /> Logout{' '}
+                  <KeyboardArrowRight /> Logout{' '}
                 </Button>
               </Tooltip>
   
-            <EditUserDetails/>
+
             </Fragment>
           </div>
         </Paper>
@@ -196,7 +194,7 @@ export class Profile extends Component {
         </Paper>
       )
     ) : (
-      <p>Loading ...Please wait, sir</p>
+ <ProfileSkeleton/>
     );
     return profileMarkup;
   }

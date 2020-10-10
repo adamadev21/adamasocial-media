@@ -64,7 +64,7 @@ exports.createNotificationOnLike = functions.firestore
       .get()
       .then((doc) => {
         if (doc.exists) {
-          return db.doc(`/notifications/F${snapshot.id}`).set({
+          return db.doc(`/notifications/${snapshot.id}`).set({
             createdAt: new Date().toISOString(),
             recipient: doc.data().userHandle,
             sender: snapshot.data().userHandle,
@@ -86,7 +86,7 @@ exports.createNotificationOnCreate = functions.firestore
       .get()
       .then((doc) => {
         if (doc.exists && doc.data().userHandle!== snapshot.data().userHandle) {
-          return db.doc(`/notifications/F${snapshot.id}`).set({
+          return db.doc(`/notifications/${snapshot.id}`).set({
             createdAt: new Date().toISOString(),
             recipient: doc.data().userHandle,
             sender: snapshot.data().userHandle,

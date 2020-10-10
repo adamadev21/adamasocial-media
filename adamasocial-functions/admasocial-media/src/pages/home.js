@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { getScreams } from "../redux/actions/dataActions";
 import store from "../redux/store/store";
 import { getUserData } from "../redux/actions/userActions";
+import ScreamSkeleton from "../util/ScreamSkeleton";
 export class Home extends Component {
   state = {
     screams: null,
@@ -22,13 +23,13 @@ export class Home extends Component {
     let screamMarkup = !loading ? (
       screams ? (
         screams.map((scream) => {
-          return <Scream key={scream.sreamId} scream={scream} />;
+          return <Scream key={scream.screamId} scream={scream} />;
         })
       ) : (
         <p>The forest is quiet ...</p>
       )
     ) : (
-      <p>Loading ...</p>
+<ScreamSkeleton/>
     );
     return (
       <Grid container spacing={16} alignItems="center">

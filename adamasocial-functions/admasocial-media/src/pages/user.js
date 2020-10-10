@@ -1,4 +1,4 @@
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import axios  from 'axios';
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
@@ -16,8 +16,6 @@ export class user extends Component {
         const handle = this.props.match.params.handle;
         const screamId = this.props.match.params.screamId;
                 this.props.getUserDetails(handle);
-                console.log(screamId)
-                console.log(this.props.data.screams)
                 this.setState({screamIdParam: screamId})
         axios.get(`http://localhost:5001/admasocial-media/us-central1/api/user/${handle}`)
         .then(res=>{
@@ -42,6 +40,7 @@ export class user extends Component {
         return (
             <Grid container spacing={16} alignItems="center">
             <Grid item sm={8} xs={12}>
+        <Typography color="textPrimary" align="center" variant='h4'>Screams by  <span color="primary"> @{this.props.match.params.handle}</span></Typography>
               {screamsMarkup}
             </Grid>
             <Grid item sm={4} xs={12}>

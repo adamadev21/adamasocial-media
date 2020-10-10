@@ -26,6 +26,10 @@ const styles = {
   formField: {
     display: 'flex',
   },
+  delete: {
+position: "absolute",
+left: "60%"
+  }
 };
 export class DeleteButton extends Component {
     state = {
@@ -51,9 +55,9 @@ this.handleClose();
     const { classes } = this.props;
     return (
       <Fragment>
-        <Tooltip title="Edit your Profile" color="primary">
-          <IconButton className="" onClick={this.handleOpen}>
-            <DeleteIcon /> <span>Delete</span>
+        <Tooltip title="Delete Scream" color="primary">
+          <IconButton color="secondary" className={classes.delete} onClick={this.handleOpen}>
+            <DeleteIcon />
           </IconButton>
         </Tooltip>
 

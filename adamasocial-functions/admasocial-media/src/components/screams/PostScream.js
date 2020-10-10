@@ -44,7 +44,6 @@ const styles = {
     };
     this.props.postScream(newScream);
     this.handleClose();
-    console.log(newScream)
   event.preventDefault()
   };
   //*Open the form when the button is clicked
@@ -123,7 +122,6 @@ PostScream.propTypes = {
   UI: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => {
-  console.log('state is', state);
   return {
     UI: state.UI,
   };

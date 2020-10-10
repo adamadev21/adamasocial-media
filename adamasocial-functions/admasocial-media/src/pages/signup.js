@@ -74,7 +74,6 @@ componentWillReceiveProps(nextProps) {
     };
 this.props.signupUser(newUserData, this.props.history)
     event.preventDefault();
-    console.log(this.props)
   };
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
@@ -178,7 +177,7 @@ this.props.signupUser(newUserData, this.props.history)
 
  }
  const mapStateToProps = (state)=> {
-   console.log(state);
+  
    return {
    user: state.user,
    UI: state.UI

@@ -37,8 +37,7 @@ const errors = this.state.errors
             multiline
             rows={2}
             label = "Comment on scream"
-            error ={errors.comment ? true : false}
-            helperText ={errors.comment? errors.comment : null}
+      
             fullWidth
           />
           <Button type="submit" variant = "contained" color="primary" style={{postion: "absolute", left: "36%", marginTop: "5px"}}>

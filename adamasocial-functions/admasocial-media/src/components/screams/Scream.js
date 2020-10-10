@@ -58,7 +58,7 @@ class Scream extends Component {
         likeCount,
         commentCount,
       },
-      user: {authenticated}
+      user: {authenticated, credentials: {handle}}
      } = this.props;
 
     return (
@@ -68,7 +68,7 @@ class Scream extends Component {
           image={userImage}
           title="Profile Name"
         />
-        <CardContent className={classes.content} fullWidth>
+        <CardContent className={classes.content}>
           <Typography
             variant="h5"
             component={Link}
@@ -77,6 +77,8 @@ class Scream extends Component {
             color="primary"
           >
             {userHandle}
+    {userHandle===handle &&  <DeleteButton screamId = {screamId}/> }
+
           </Typography>
           <Typography color="textSecondary" variant="body2">
             Posted: {dayjs(createdAt).fromNow()}{" "}
@@ -90,13 +92,12 @@ class Scream extends Component {
               maxWidth: "90%",
             }}
           >
-            <DeleteButton screamId = {screamId}/>
             <LikeButton authenticated={authenticated}  screamId={screamId}/><span>{likeCount} {"   "}</span> Likes
            <CommentButton authenticated={authenticated} />
            {commentCount} {"   "}
             <span> Comments</span>
           </Typography>
-          <ScreamDialog screamId ={screamId} userHandle={userHandle} openDialog={this.props.openDialog}/>
+          <ScreamDialog authenticated={authenticated} screamId ={screamId} userHandle={userHandle} openDialog={this.props.openDialog}/>
         </CardContent>
       </Card>
     );
