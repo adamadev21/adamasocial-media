@@ -12,7 +12,7 @@ export const loginUser = (userData, history) => (dispatch) => {
   dispatch({ type: LOADING_UI });
   axios
     .post(
-      'http://localhost:5001/admasocial-media/us-central1/api/login',
+      '/login',
       userData
     )
     .then((res) => {
@@ -32,7 +32,7 @@ export const signupUser = (newUserData, history) => (dispatch) => {
   dispatch({ type: LOADING_UI });
   axios
     .post(
-      'http://localhost:5001/admasocial-media/us-central1/api/signup',
+      '/signup',
       newUserData
     )
     .then((res) => {
@@ -50,7 +50,7 @@ export const signupUser = (newUserData, history) => (dispatch) => {
 export const getUserData = () => (dispatch) => {
   dispatch({type: LOADING_USER})
   axios
-    .get('http://localhost:5001/admasocial-media/us-central1/api/user')
+    .get('/user')
     .then((res) => {
   //* Now i NEED to get the user's full data to display in profile
  dispatch({type: SET_USER, payload: res.data})
@@ -65,7 +65,7 @@ export const getUserData = () => (dispatch) => {
 
 export const uploadProfileImage = (formData) => (dispatch) =>{
   dispatch({type: LOADING_USER});
-  axios.post("http://localhost:5001/admasocial-media/us-central1/api/user/image", formData)
+  axios.post("/user/image", formData)
   .then(()=>{
 dispatch(getUserData())
   })
@@ -78,7 +78,7 @@ console.log(err.response.data)
 
 export const editUserDetails = (userData) => (dispatch)=> {
   dispatch({type: LOADING_USER})
-  axios.post("http://localhost:5001/admasocial-media/us-central1/api/user", userData)
+  axios.post("/user", userData)
   .then(res=>{
     dispatch(getUserData())
   })
@@ -90,7 +90,7 @@ export const editUserDetails = (userData) => (dispatch)=> {
 //*Get user details
 export const getUserDetails = (userHandle)=>(dispatch)=>{
   dispatch({type: LOADING_UI});
-  axios.get(`http://localhost:5001/admasocial-media/us-central1/api/user/${userHandle}`)
+  axios.get(`/user/${userHandle}`)
   .then(res=>{
     dispatch({type: SET_SCREAMS, payload: res.data.screams})
   })
@@ -116,7 +116,7 @@ export const logoutUser = () => (dispatch) => {
 };
 
 export  const markNotificationsRead = (notificationIds)=> (dispatch)=>{
-  axios.post("http://localhost:5001/admasocial-media/us-central1/notifications",  notificationIds)
+  axios.post("/notifications",  notificationIds)
   .then(()=>{
     dispatch({type: MARK_NOTIFICATIONS_READ});
   }).catch(err=>console.log(err))

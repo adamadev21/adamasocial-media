@@ -46,9 +46,10 @@ const styles = (theme) => ({
     left: "90%",
   },
   expandButton: {
-    position: "absolute",
-    left: "60%",
-    top: "22.5%"
+   position: "absolute",
+  left: "60%",
+  //   top: '50%',
+
   },
   spinnerDiv: {
     textAlign: "center",
@@ -143,7 +144,7 @@ class ScreamDialog extends Component {
       <Fragment>
         <Tooltip title="Read more ..." color="primary">
           <IconButton onClick={this.handleOpen} className={classes.expandButton}>
-            <UnfoldMore className={classes.expandButton} />
+            <UnfoldMore className='' />
           </IconButton>
         </Tooltip>
 

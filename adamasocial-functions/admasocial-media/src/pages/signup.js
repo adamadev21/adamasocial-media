@@ -39,8 +39,13 @@ const styles = {
     fontSize: '0.8rem',
     marginTop: 10,
   },
+  prorgress: {
+  },
   progress: {
     position: 'absolute',
+    textAlign: "center",
+    marginTop: 50,
+    marginBottom: 50,
   },
   textField: {
     marginTop: 10,
@@ -139,7 +144,7 @@ this.props.signupUser(newUserData, this.props.history)
               </Typography>
             ) : null}
             <Button
-              disabled={this.state.loading}
+              disabled={loading }
               className={classes.button}
               color="primary"
               variant="contained"
@@ -150,8 +155,7 @@ this.props.signupUser(newUserData, this.props.history)
               Sign Up
               {loading ? (
                 <CircularProgress
-                  variant="static"
-                  size={30}
+                  size={60}
                   value="indeterminate"
                   className={classes.progess}
                 />

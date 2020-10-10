@@ -35,7 +35,6 @@
     "not dead",
     "not op_mini all"
   ],
-  "proxy": "https://us-central1-admasocial-media.cloudfunctions.net/api",
   "devDependencies": {
     "redux-devtools": "^3.7.0"
   }

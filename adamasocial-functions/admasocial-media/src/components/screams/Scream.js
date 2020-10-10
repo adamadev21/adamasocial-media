@@ -96,8 +96,9 @@ class Scream extends Component {
            <CommentButton authenticated={authenticated} />
            {commentCount} {"   "}
             <span> Comments</span>
+            <ScreamDialog authenticated={authenticated} screamId ={screamId} userHandle={userHandle} openDialog={this.props.openDialog}/>
+
           </Typography>
-          <ScreamDialog authenticated={authenticated} screamId ={screamId} userHandle={userHandle} openDialog={this.props.openDialog}/>
         </CardContent>
       </Card>
     );

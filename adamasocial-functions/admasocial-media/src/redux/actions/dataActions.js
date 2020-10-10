@@ -3,7 +3,7 @@ import axios from 'axios'
 //*Get all screams
 export const getScreams = ()=> (dispatch)=>{
     dispatch({type: LOADING_DATA});
-    axios.get("http://localhost:5001/admasocial-media/us-central1/api/screams")
+    axios.get("/screams")
     .then(res=>{
         dispatch({
             type: SET_SCREAMS,
@@ -21,7 +21,7 @@ export const getScreams = ()=> (dispatch)=>{
 // export const getOneScream = () => (dispatch) => {
 //     dispatch({type: LOADING_DATA})
 //     axios
-//       .get('http://localhost:5001/admasocial-media/us-central1/api/scream')
+//       .get('/scream')
 //       .then((res) => {
 //     //* Now i NEED to get the full data to display
 //    dispatch({type: SET_SCREAM, payload: res.data})
@@ -31,7 +31,7 @@ export const getScreams = ()=> (dispatch)=>{
 //       })
 //   };
 export const likeScream = (screamId)=> (dispatch)=>{
-    axios.get(`http://localhost:5001/admasocial-media/us-central1/api/scream/${screamId}/like`)
+    axios.get(`/scream/${screamId}/like`)
     .then(res=>{
         dispatch({type: LIKE_SCREAM, payload: res.data})
     })
@@ -41,7 +41,7 @@ export const likeScream = (screamId)=> (dispatch)=>{
 }
 
 export const unlikeScream = (screamId)=> (dispatch)=>{
-    axios.get(`http://localhost:5001/admasocial-media/us-central1/api/scream/${screamId}/unlike`)
+    axios.get(`/scream/${screamId}/unlike`)
     .then(res=>{
         dispatch({type: UNLIKE_SCREAM, payload: res.data})
     })
@@ -53,7 +53,7 @@ export const unlikeScream = (screamId)=> (dispatch)=>{
 
 //*Delete a scream
 export const deleteScream = (screamId) =>(dispatch)=>{
-axios.get(`http://localhost:5001/admasocial-media/us-central1/api/scream/${screamId}/delete`)
+axios.get(`/scream/${screamId}/delete`)
 .then(res=>{
 dispatch({type: DELETE_SCREAM ,payload: res.data})
 })
@@ -65,7 +65,7 @@ dispatch({type: DELETE_SCREAM ,payload: res.data})
 //*Post a scream
 export const postScream =(newScream)=> (dispatch)=>{
     dispatch({type: LOADING_UI})
-axios.post("http://localhost:5001/admasocial-media/us-central1/api/screams", newScream)
+axios.post("/screams", newScream)
 .then(res=>{
     dispatch({type: POST_SCREAM,  payload:res.data});
 })
@@ -76,7 +76,7 @@ axios.post("http://localhost:5001/admasocial-media/us-central1/api/screams", new
 
 export const getOneScream =(screamId) => (dispatch)=>{
     dispatch({type: LOADING_UI});
-    axios.get(`http://localhost:5001/admasocial-media/us-central1/api/scream/${screamId}`)
+    axios.get(`/scream/${screamId}`)
     .then(res=>{
         dispatch({type: SET_SCREAM, payload: res.data})
         dispatch({type: STOP_LOADING_UI})
@@ -91,7 +91,7 @@ export const getOneScream =(screamId) => (dispatch)=>{
 
 export const commentScream = (screamId, newComment) => dispatch => {
 dispatch({type: LOADING_UI});
-axios.post(`http://localhost:5001/admasocial-media/us-central1/api/scream/${screamId}/comment`, newComment)
+axios.post(`/scream/${screamId}/comment`, newComment)
 .then(res=>{
     dispatch({type: SUBMIT_COMMENT, payload: res.data})
     dispatch({type:STOP_LOADING_UI})

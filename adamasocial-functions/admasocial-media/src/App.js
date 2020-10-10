@@ -21,9 +21,9 @@ import store from './redux/store/store';
 import {Provider} from 'react-redux';
 import { SET_AUTHENTICATED } from './redux/utils/types';
 import { logoutUser, getUserData } from './redux/actions/userActions';
-import StaticProfile from './components/profile/StaticProfile';
 import user  from './pages/user';
 
+axios.defaults.baseURL = "https://us-central1-admasocial-media.cloudfunctions.net/api"
 
 const theme = createMuiTheme(themeFile);
 
