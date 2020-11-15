@@ -1,4 +1,4 @@
-import React, { Component , Fragment} from "react";
+import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -13,13 +13,13 @@ import withStyles from "@material-ui/styles/withStyles";
 
 //*Icons again!
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
-import ChatIcon from "@material-ui/icons/Chat";
+import {Edit, FavoriteBorder, ShareRounded as Share} from "@material-ui/icons";
+import ChatIcon from "@material-ui/icons/ChatBubbleRounded";
 //*Components
-import  DeleteButton from "./DeleteButton";
-import  ScreamDialog from "./ScreamDialog";
-import LikeButton  from "./LikeButton";
-import CommentButton from './CommentButton'
+import DeleteButton from "./DeleteButton";
+import ScreamDialog from "./ScreamDialog";
+import LikeButton from "./LikeButton";
+import CommentButton from "./CommentButton";
 
 //* Redux yella
 import { connect } from "react-redux";
@@ -31,17 +31,41 @@ const styles = {
   card: {
     display: "flex",
     marginBottom: 20,
+    marginLeft: 20,
+    paddingLeft: 10,
   },
   media: {
-    minWidth: 200,
-    minHeight: 150,
-    marginLeft: 20,
+    minWidth: 100,
+    height: 100,
+    borderRadius: "50%",
   },
   content: {
     padding: 25,
     display: "flex",
     flexDirection: "column",
     textDecoration: "none",
+    width: "90%",
+  },
+  head: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    maxWidth: "60%",
+  },
+  body: {
+    minHeight: 50,
+    minWidth: "80%",
+    background: "rgba(0,0,0,0.02)",
+    borderRadius: "4%",
+    padding: 20,
+  },
+  footer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 10,
+    padding: 20,
+    maxWidth: "80%",
   },
 };
 
@@ -57,9 +81,13 @@ class Scream extends Component {
         screamId,
         likeCount,
         commentCount,
+        author
       },
-      user: {authenticated, credentials: {handle}}
-     } = this.props;
+      user: {
+        authenticated,
+        credentials: { handle },
+      },
+    } = this.props;
 
     return (
       <Card className={classes.card}>
@@ -69,36 +97,56 @@ class Scream extends Component {
           title="Profile Name"
         />
         <CardContent className={classes.content}>
-          <Typography
-            variant="h5"
-            component={Link}
-            to={`/users/${userHandle}`}
-            style={{ textDecoration: "none" }}
-            color="primary"
-          >
-            {userHandle}
-    {userHandle===handle &&  <DeleteButton screamId = {screamId}/> }
+          <div className={classes.head}>
+            <Typography
+              variant="h6"
+              color="textPrimary"
+              style={{ fontWeight: "bold" }}
+            >
+         {author}
+            </Typography>
+            <Typography
+              variant="h6"
+              component={Link}
+              to={`/users/${userHandle}`}
+              style={{ textDecoration: "none", marginLeft: 3 }}
+              color="primary"
+            >
+              @{userHandle}
+            
+            </Typography>
+            <Typography color="textSecondary" variant="h6">
+              {dayjs(createdAt).fromNow()}{" "}
+            </Typography>
+          </div>
+          <Typography variant="body1" className={classes.body}>
+            {body}
+          </Typography>
+          <div className={classes.footer}>
+            <LikeButton authenticated={authenticated} screamId={screamId}>
+              {likeCount} {"   "}
+            </LikeButton>
+            <CommentButton authenticated={authenticated}>
+              {commentCount} {"   "}
+            </CommentButton>
+            <Button color='primary'>
+              <Share />
+            </Button>
+            <Button color='secondary' >
+            {userHandle === handle && <DeleteButton screamId={screamId} />}
+            </Button>
+                     <Button color ='primary'>
+            {userHandle === handle && <Edit screamId={screamId} />}
+            </Button>
+            
+          </div>
 
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            Posted: {dayjs(createdAt).fromNow()}{" "}
-          </Typography>
-          <Typography variant="body1">{body}</Typography>
-          <Typography
-            style={{
-              display: "inline-flex",
-              flexDirection: "row",
-              flexWrap: "no-wrap",
-              maxWidth: "90%",
-            }}
-          >
-            <LikeButton authenticated={authenticated}  screamId={screamId}/><span>{likeCount} {"   "}</span> Likes
-           <CommentButton authenticated={authenticated} />
-           {commentCount} {"   "}
-            <span> Comments</span>
-            <ScreamDialog authenticated={authenticated} screamId ={screamId} userHandle={userHandle} openDialog={this.props.openDialog}/>
-
-          </Typography>
+          <ScreamDialog
+            authenticated={authenticated}
+            screamId={screamId}
+            userHandle={userHandle}
+            openDialog={this.props.openDialog}
+          />
         </CardContent>
       </Card>
     );

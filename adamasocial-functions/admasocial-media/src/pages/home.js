@@ -32,7 +32,7 @@ export class Home extends Component {
 <ScreamSkeleton/>
     );
     return (
-      <Grid container spacing={16} alignItems="center">
+      <Grid container spacing={5} alignItems="center">
         <Grid item sm={8} xs={12}>
           {screamMarkup}
         </Grid>

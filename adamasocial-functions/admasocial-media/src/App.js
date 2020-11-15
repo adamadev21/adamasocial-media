@@ -22,9 +22,9 @@ import {Provider} from 'react-redux';
 import { SET_AUTHENTICATED } from './redux/utils/types';
 import { logoutUser, getUserData } from './redux/actions/userActions';
 import user  from './pages/user';
+axios.defaults.headers.common["Access-Control-Allow-Origin"] = true;
 
-axios.defaults.baseURL = "https://us-central1-admasocial-media.cloudfunctions.net/api"
-
+axios.defaults.baseURL = "http://localhost:5006/admasocial-media/us-central1/api"
 const theme = createMuiTheme(themeFile);
 
 const token = localStorage.FBIdToken;

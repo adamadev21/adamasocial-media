@@ -13,7 +13,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/Button';
-import DeleteIcon from '@material-ui//icons/DeleteOutline';
+import DeleteIcon from '@material-ui//icons/Delete';
 import Tooltip from '@material-ui/core/Tooltip';
 
 const styles = {
@@ -26,10 +26,6 @@ const styles = {
   formField: {
     display: 'flex',
   },
-  delete: {
-position: "absolute",
-left: "60%"
-  }
 };
 export class DeleteButton extends Component {
     state = {

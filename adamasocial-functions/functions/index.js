@@ -5,7 +5,6 @@
 
 const app = require('express')();
 const { FBAuth } = require('./utilities/middleware/middleware');
-const cors = require("cors");
 
 const functions = require('firebase-functions');
 const {
@@ -30,9 +29,12 @@ const admin = require('./utilities/admin');
 const { db } = require('./utilities/admin');
 
 //*Allow cross origin resource sharing
-app.use(cors({origin: true}))
-
-
+const cors = require("cors");
+const options = {
+  origin: "http://localhost:3000",
+  credentials: true,
+}
+app.all("*", cors(options))
 //*===================>
 //*ROUTES************
 //******************* */

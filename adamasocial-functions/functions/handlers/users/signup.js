@@ -9,6 +9,7 @@ exports.signup = (req, res) => {
       password: req.body.password,
       confirmPassword: req.body.confirmPassword,
       handle: req.body.handle,
+      fullName: req.body.fullName,
     };
     console.log(newUser);
     console.log("config", config)
@@ -40,6 +41,7 @@ exports.signup = (req, res) => {
           handle: newUser.handle,
           email: newUser.email,
           password: newUser.password,
+          fullName: newUser.fullName,
           createdAt: new Date().toISOString(),
           imageUrl : `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
           userId,

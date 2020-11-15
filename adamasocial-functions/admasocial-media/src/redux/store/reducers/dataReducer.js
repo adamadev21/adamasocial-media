@@ -35,7 +35,7 @@ const dataReducer = (state = initialState, action) => {
       };
     case DELETE_SCREAM:
       let index = state.screams.find(
-        (scream) => scream.screamId === action.payload.screamId
+        (scream) => scream.screamId !== action.payload.screamId
       );
       state.screams.splice(index, 1);
       return {

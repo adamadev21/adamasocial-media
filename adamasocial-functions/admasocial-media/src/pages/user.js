@@ -17,7 +17,7 @@ export class user extends Component {
         const screamId = this.props.match.params.screamId;
                 this.props.getUserDetails(handle);
                 this.setState({screamIdParam: screamId})
-        axios.get(`http://localhost:5001/admasocial-media/us-central1/api/user/${handle}`)
+        axios.get(`/user/${handle}`)
         .then(res=>{
             this.setState({profile: res.data.user})
         })
