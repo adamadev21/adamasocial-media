@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 //* Redux imports
 import { uploadProfileImage } from '../../redux/actions/userActions';
-import { logoutUser, editUserDetails } from '../../redux/actions/userActions';
+import { logoutUser, editUserDetails, getUserData } from '../../redux/actions/userActions';
 
 //*MUI stuff
 import Button from '@material-ui/core/Button';
@@ -75,7 +75,9 @@ const styles = (theme) => ({
   },
 });
 export class Profile extends Component {
-
+componentDidMount(){
+  this.props.getUserData();
+}
   handleImageChange = (event) => {
     const image = event.target.files[0];
     const formData = new FormData();
@@ -158,6 +160,7 @@ export class Profile extends Component {
                 <Button
                   variant="contained"
                   color="secondary"
+                  style={{color: "white"}}
                   onClick={this.handleLogout}
                 >
                   <KeyboardArrowRight /> Logout{' '}
@@ -166,6 +169,7 @@ export class Profile extends Component {
   
 
             </Fragment>
+   
           </div>
         </Paper>
       ) : (
@@ -204,7 +208,7 @@ const mapStateToProps = (state) => ({
 });
 const mapActionsToProps = {
   uploadProfileImage,
-  logoutUser, editUserDetails
+  logoutUser, editUserDetails, getUserData
 };
 
 Profile.propTypes = {

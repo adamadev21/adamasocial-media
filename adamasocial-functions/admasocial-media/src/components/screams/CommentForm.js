@@ -1,9 +1,10 @@
-import { Button, Grid, TextField } from "@material-ui/core";
+import { Button, Grid, Input, TextField } from "@material-ui/core";
 import React, { Component } from "react";
 import PropTypes from 'prop-types'
 //* Redux stuff
 import { connect } from "react-redux";
 import { commentScream } from "../../redux/actions/dataActions";
+import { PictureAsPdf } from "@material-ui/icons";
 
 export class CommentForm extends Component {
   state = {
@@ -35,9 +36,9 @@ const errors = this.state.errors
             onChange={this.handleChange}
             type="text"
             multiline
-            rows={2}
+            rows={3}
             label = "Comment on scream"
-      
+      variant='outlined'
             fullWidth
           />
           <Button type="submit" variant = "contained" color="primary" style={{postion: "absolute", left: "36%", marginTop: "5px"}}>

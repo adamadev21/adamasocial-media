@@ -23,7 +23,7 @@ exports.postComment = (req, res) => {
       .add(newComment)
     })
     .then(data=>{
-      return res.status(200).json(data)
+      return res.status(200).json(newComment)
     })
     .catch(err=>{
       console.error(err)

@@ -44,6 +44,8 @@ export class NotificationIcon extends Component {
         ? (notificationsMarkup = (
             <Badge
               anchor={ancorEl}
+              style={{color: "white"}}
+              
               badgeContent={
                 notifications.filter((not) => not.read === false).length
               }

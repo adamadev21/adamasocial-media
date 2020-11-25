@@ -21,4 +21,9 @@ export const POST_SCREAM = "POST_SCREAM"
 export const SET_COMMENT = "SET_COMMENT"
 export const SUBMIT_COMMENT = "SUBMIT_COMMENT"
 
-
+//*Message center
+export const SEND_MESSAGE = "SEND_MESSAGE"
+export const GET_MESSAGES = "GET_MESSAGES"
+export const GET_FRIENDS = "GET_FRIENDS"
+export const READ_MESSAGE = "READ_MESSAGE"
+export const DELETE_MESSAGE = "DELETE_MESSAGE"

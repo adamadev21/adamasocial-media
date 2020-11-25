@@ -20,8 +20,9 @@ import AuthRoute from './util/authRoute';
 import store from './redux/store/store';
 import {Provider} from 'react-redux';
 import { SET_AUTHENTICATED } from './redux/utils/types';
-import { logoutUser, getUserData } from './redux/actions/userActions';
+import { logoutUser, getUserData, getFriends } from './redux/actions/userActions';
 import user  from './pages/user';
+import messages from './pages/messages';
 axios.defaults.headers.common["Access-Control-Allow-Origin"] = true;
 
 axios.defaults.baseURL = "http://localhost:5006/admasocial-media/us-central1/api"
@@ -53,6 +54,7 @@ function App() {
               <AuthRoute path="/signup" exact component={Signup}  />
               <AuthRoute path="/login" exact component={Login} />
               <Route exact  path="/users/:handle" component={user} />
+              <Route exact  path="/messages" component={messages} />
               <Route exact path="/users/:handle/scream/:screamId" component={user}/>
             </Switch>
           </div>

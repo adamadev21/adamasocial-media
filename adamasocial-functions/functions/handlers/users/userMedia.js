@@ -8,13 +8,10 @@ exports.uploadImage = (req,res)=>{
     const fs = require('fs');
     let token = uuid()
     const busboy = new BusBoy ({headers:req.headers});
+    console.log(req)
     let imageFileName;
     let imageToBeUploaded={};
     busboy.on('file', (fieldname, file, filename, encoding, mimetype)=>{
-        console.log(filename);
-        console.log(fieldname);
-        console.log(mimetype);
-        //*my.file.png
         const imageExtension = filename.split('.')[filename.split('.').length - 1];
         imageFileName = `${Math.round(Math.random()*10000000000).toString()}`.concat('.',`${imageExtension}`);
         const filepath =path.join(os.tmpdir(), imageFileName);

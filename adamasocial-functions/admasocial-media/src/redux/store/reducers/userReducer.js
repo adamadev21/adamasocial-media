@@ -1,10 +1,10 @@
 import {
     LOADING_UI,
 SET_AUTHENTICATED,
-SET_ERRORS,
+GET_FRIENDS,
 SET_UNAUTHENTICATED,
 SET_USER,
-LOADING_USER, LIKE_SCREAM, UNLIKE_SCREAM, MARK_NOTIFICATIONS_READ
+LOADING_USER, LIKE_SCREAM, UNLIKE_SCREAM, MARK_NOTIFICATIONS_READ, SEND_MESSAGE, GET_MESSAGES
 } from '../../utils/types';
 
 const initialState = {
@@ -13,8 +13,9 @@ const initialState = {
     loading: false,
     likes: [],
     notifications: [],
-    comments: []
-
+    comments: [],
+messages: [],
+friends: []
 };
 
 const userReducer = (state=initialState, action)=>{
@@ -50,7 +51,23 @@ const userReducer = (state=initialState, action)=>{
                 likes: state.likes.filter(like=> like.screamId !== action.payload.screamId)
             };
             case MARK_NOTIFICATIONS_READ: 
-             state.notifications.forEach(not => not.read = true)
+             
+             return {
+                 ...state, notifications : state.notifications.forEach(not => not.read = true)
+             }
+        case SEND_MESSAGE:
+            return {
+                ...state,
+                messages: [ ...state.messages,action.payload]
+            };
+        case GET_MESSAGES:
+            return {
+                ...state, messages: action.payload
+            };
+        case GET_FRIENDS:
+            return  {
+            ...state, friends: action.payload
+        }
         default:
             return state;
     }

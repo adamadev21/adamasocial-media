@@ -43,10 +43,10 @@ const dataReducer = (state = initialState, action) => {
       };
     case LIKE_SCREAM:
     case UNLIKE_SCREAM:
-      let indextoDel = state.screams.findIndex(
+      let indextoUpdate = state.screams.findIndex(
         (scream) => scream.screamId === action.payload.screamId
       );
-      state.screams[indextoDel] = action.payload;
+      state.screams[indextoUpdate] = action.payload;
       if (state.scream.screamId === action.payload.screamId) {
         state.scream = action.payload;
       }
@@ -60,7 +60,7 @@ const dataReducer = (state = initialState, action) => {
         ...state,
         scream: {
           ...state.scream,
-          comments: [action.payload, ...state.scream.comments],
+          comments: [ action.payload, ...state.scream.comments,],
         },
       };
  

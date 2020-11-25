@@ -22,6 +22,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import EditUserDetails  from './EditUserDetails';
 import Axios from 'axios';
+import { Grid } from '@material-ui/core';
+import { Email } from '@material-ui/icons';
 //* style classes
 const styles = (theme) => ({
     paper: {
@@ -74,16 +76,26 @@ const styles = (theme) => ({
   });
 
 const StaticProfile =(props) =>{
-    const {profile:{ imageUrl, handle, createdAt, bio, location, website}, classes} = props;
+    const {profile:{ imageUrl, handle, createdAt,}, classes} = props;
+    const bio = "I am the greatest terrorist alive"
+    const website = 'https://nazagmda.com'
+    const location =' Ouagadougou'
         return (
-            <Paper className={classes.paper}>
-            <div className={classes.profile}>
+
+          <Grid container spacing={3}>
+            <Grid item className={classes.profile}>
               <div className="image-wrapper">
                 <img src={imageUrl} alt="profile" className="profile-image" />
         
               </div>
               <hr />
-              <div className="profile-details">
+              <Button color='primary' variant='contained'>
+                <Email /> Message
+              </Button>
+             
+            </Grid>
+            <Grid item xs={6}>
+            <div className="profile-details">
                 <MuiLink variant="h5" to={`/users/${handle}`} Component={Link}>
                   @{handle}
                 </MuiLink>
@@ -106,9 +118,9 @@ const StaticProfile =(props) =>{
                   <span>Joined {dayjs(createdAt).format('MMM YYYY')}</span>
                 </Fragment>
               </div>
+            </Grid>
+          </Grid>
 
-              </div>
-          </Paper>
         ) 
         
     }

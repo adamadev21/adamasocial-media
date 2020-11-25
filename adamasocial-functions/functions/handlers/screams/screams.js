@@ -1,5 +1,8 @@
 const { debug } = require("firebase-functions/lib/logger");
-const { db, admin } = require("../../utilities/admin");
+const { uuid } = require("uuidv4");
+const { db, admin, storage } = require("../../utilities/admin");
+const firebase = require("firebase/app");
+const { config } = require("../../utilities/config");
 
 exports.getAllScreams = (req, res) => {
   db.collection("screams")
@@ -13,7 +16,8 @@ exports.getAllScreams = (req, res) => {
           body: doc.data().body,
           userHandle: doc.data().userHandle,
           createdAt: doc.data().createdAt,
-        author: doc.data().author,
+          author: doc.data().author,
+          pictureUrl: doc.data().pictureUrl ? doc.data().pictureUrl : null,
           userImage: doc.data().userImage,
           likeCount: doc.data().likeCount,
           commentCount: doc.data().commentCount,
@@ -28,21 +32,22 @@ exports.getAllScreams = (req, res) => {
     });
 };
 exports.postScream = (req, res) => {
+  console.log(req.body)
   if (req.body.body.trim() === "") {
-    return res.status(400).json({ body: "Body must not be empty" });
+    return res.status(400).json({ error: "Body must not be empty" });
   }
   const newScream = {
     body: req.body.body,
     userHandle: req.user.handle,
     createdAt: new Date().toISOString(),
     comments: [],
-    author: req.user.fullName,
+    pictureUrl: req.body.imageUrl? req.body.imageUrl : null,
+    author: req.body.author,
     likes: [],
     userImage: req.user.imageUrl,
     likeCount: 0,
     commentCount: 0,
   };
-  console.log(req.user.imageUrl);
   admin
     .firestore()
     .collection("screams")
@@ -50,8 +55,9 @@ exports.postScream = (req, res) => {
     .then((doc) => {
       const resScream = newScream;
       resScream.screamId = doc.id;
-      res.json(resScream);
       db.doc(`screams/${doc.id}`).update({ screamId: resScream.screamId });
+    return  res.json(resScream);
+
     })
     .catch((err) => {
       res.status(500).json({ error: "Something went wrong!" });
@@ -75,7 +81,7 @@ exports.likeScream = (req, res) => {
     .then((doc) => {
       console.log(doc);
       if (!doc.exists) {
-        return res.json({ error: "Scream not found" });
+        return res.status(404).json({ error: "Scream not found" });
       } else {
         screamData = doc.data();
         screamData.screamId = doc.id;
@@ -98,7 +104,7 @@ exports.likeScream = (req, res) => {
             return res.status(201).json(screamData);
           });
       } else {
-        return res.status(203).json("Scream already liked");
+        return res.status(400).json("Scream already liked");
       }
     })
     .catch((err) => {
@@ -182,4 +188,31 @@ exports.deleteScream = (req, res) => {
     .catch((err) => {
       return res.status(500).json({ error: err.code });
     });
+};
+
+const uploadImage = (image) => {
+  console.log(image)
+ const uploadTask = storage.ref(`postimages/${image.name}`).put(image);
+ uploadTask.on(
+  "state_changed",
+  snapshot => {
+    const progress = Math.round(
+      (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+    );
+    console.log(progress);
+  },
+  error => {
+    console.log(error);
+  },
+  () => {
+storage
+      .ref("postimages")
+      .child(image.name)
+      .getDownloadURL()
+      .then(url => {
+        console.log(url)
+        return url
+      });
+  }
+);
 };

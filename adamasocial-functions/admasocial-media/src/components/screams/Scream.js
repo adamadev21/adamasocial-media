@@ -23,7 +23,7 @@ import CommentButton from "./CommentButton";
 
 //* Redux yella
 import { connect } from "react-redux";
-import { likeScream, unlikeScream } from "../../redux/actions/dataActions";
+import { likeScream, unlikeScream, getOneScream} from "../../redux/actions/dataActions";
 
 //*Extend dayjs to use relativetime
 dayjs.extend(relativeTime);
@@ -70,6 +70,27 @@ const styles = {
 };
 
 class Scream extends Component {
+  state = {
+    open: false,
+    oldPath: "",
+    currPath: ""
+  }
+  handleOpen = () => {     
+    console.log(this.props)
+    let oldPath = window.location.pathname;
+    const {userHandle, screamId} = this.props.scream;
+    let currPath = `/users/${userHandle}/scream/${screamId}`;
+    this.setState({ open: true, oldPath, currPath});
+    window.history.pushState(null, null, currPath)
+
+  };
+  handleClose = () => {
+    this.setState({open: false})
+    window.history.pushState(null,null, this.state.oldPath);
+    if(this.state.oldPath===this.state.currPath) this.setState({oldPath: `/users/${this.props.userHandle}`})
+    window.history.pushState(null, null, this.state.oldPath)
+  };
+
   render() {
     const {
       classes,
@@ -78,10 +99,11 @@ class Scream extends Component {
         createdAt,
         userImage,
         userHandle,
+        pictureUrl,
         screamId,
         likeCount,
         commentCount,
-        author
+        author,
       },
       user: {
         authenticated,
@@ -120,13 +142,15 @@ class Scream extends Component {
             </Typography>
           </div>
           <Typography variant="body1" className={classes.body}>
+{pictureUrl &&<img style={{display:"block", height: 250, width: "80%", alignContent:"center"}} hidden={!pictureUrl} src={pictureUrl} alt="Post foto" />}
+
             {body}
           </Typography>
           <div className={classes.footer}>
             <LikeButton authenticated={authenticated} screamId={screamId}>
               {likeCount} {"   "}
             </LikeButton>
-            <CommentButton authenticated={authenticated}>
+            <CommentButton authenticated={authenticated} handleOpen={this.handleOpen}>
               {commentCount} {"   "}
             </CommentButton>
             <Button color='primary'>
@@ -144,8 +168,11 @@ class Scream extends Component {
           <ScreamDialog
             authenticated={authenticated}
             screamId={screamId}
+            author={author}
             userHandle={userHandle}
-            openDialog={this.props.openDialog}
+            openDialog={this.state.open}
+            handleOpen={this.handleOpen}  handleClose={this.handleClose}
+            open = {this.state.open}
           />
         </CardContent>
       </Card>
@@ -168,6 +195,7 @@ const mapStateToProps = (state) => ({
 const mapActionsToProps = {
   likeScream,
   unlikeScream,
+  getOneScream,
 };
 
 export default connect(

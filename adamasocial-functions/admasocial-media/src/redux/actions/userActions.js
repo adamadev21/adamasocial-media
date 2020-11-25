@@ -3,9 +3,9 @@ import {
   LOADING_UI,
 MARK_NOTIFICATIONS_READ,
   SET_ERRORS,
-  CLEAR_ERRORS,
+  CLEAR_ERRORS,GET_FRIENDS,
   SET_UNAUTHENTICATED,
-  SET_USER, LOADING_USER, SET_SCREAMS
+  SET_USER, LOADING_USER, SET_SCREAMS, STOP_LOADING_UI, SEND_MESSAGE, GET_MESSAGES
 } from '../utils/types';
 
 export const loginUser = (userData, history) => (dispatch) => {
@@ -54,6 +54,7 @@ export const getUserData = () => (dispatch) => {
     .then((res) => {
   //* Now i NEED to get the user's full data to display in profile
  dispatch({type: SET_USER, payload: res.data})
+ dispatch(getFriends())
     })
     .catch((err) => {
       console.log(err);
@@ -120,4 +121,39 @@ export  const markNotificationsRead = (notificationIds)=> (dispatch)=>{
   .then(()=>{
     dispatch({type: MARK_NOTIFICATIONS_READ});
   }).catch(err=>console.log(err))
+}
+
+//* Messages
+
+export const sendMessage = (recipient, msg)=> dispatch=>{
+  dispatch({type: LOADING_UI});
+  axios.post(`/messages/send/${recipient}`, msg)
+  .then(res=>{
+    dispatch({type: STOP_LOADING_UI});
+    dispatch({type: SEND_MESSAGE, payload: res.data})
+  })
+  .catch(error=>{
+    console.log(error)
+    dispatch({type: STOP_LOADING_UI})
+  })
+}
+export const getFriends = ()=>dispatch=>{
+  axios.get(`/messages`).then(res=>{
+    dispatch({type: GET_FRIENDS, payload: res.data})
+  })
+  .catch(err=>{
+    console.log(err);
+    dispatch({type: GET_FRIENDS, payload: []})
+  })
+}
+export const getAllMessages = (friend)=> dispatch=>{
+  dispatch({type:LOADING_UI});
+  axios.get(`/messages/${friend}`).then(res=>{
+    dispatch({type: GET_MESSAGES, payload: res.data});
+    dispatch({type: STOP_LOADING_UI})
+  })
+  .catch(err=>{
+    console.log(err);
+    dispatch({type: GET_MESSAGES, payload: []})
+  })
 }

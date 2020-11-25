@@ -2,7 +2,6 @@ const firebase = require('firebase');
 const { db, admin} = require("../../utilities/admin");
 const { config } = require('../../utilities/config');
 const { signupValidation } = require("../../utilities/helpers/validation");
-firebase.initializeApp(config);
 exports.signup = (req, res) => {
     const newUser = {
       email: req.body.email,

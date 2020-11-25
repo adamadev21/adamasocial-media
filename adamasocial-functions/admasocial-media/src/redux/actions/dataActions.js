@@ -63,9 +63,10 @@ dispatch({type: DELETE_SCREAM ,payload: res.data})
 }
 
 //*Post a scream
-export const postScream =(newScream)=> (dispatch)=>{
+export const postScream =(data)=> (dispatch)=>{
+    console.log(data)
     dispatch({type: LOADING_UI})
-axios.post("/screams", newScream)
+axios.post("/screams", data)
 .then(res=>{
     dispatch({type: POST_SCREAM,  payload:res.data});
 })

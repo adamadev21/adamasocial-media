@@ -8,3 +8,4 @@ exports.config = {
   messagingSenderId: "760789328240",
   appId: "1:760789328240:web:343b8b52145d40a30c2fb5"
 };
+

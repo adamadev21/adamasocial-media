@@ -50,6 +50,7 @@ class Comments extends Component {
                       <Typography
                         variant="h5"
                         component={Link}
+                        style={{textDecoration: "none"}}
                         to={`/users/${comment.userHandle}`}
                         color="primary"
                       >
@@ -66,7 +67,7 @@ class Comments extends Component {
               <hr  />
 
             </Grid>
-            {index !== comments.length - 1 && (
+            {index <= comments.length - 2 && (
                 <hr className={classes.visibleSeparator} />
               )}
 
