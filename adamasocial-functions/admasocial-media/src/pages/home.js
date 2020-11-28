@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Grid from "@material-ui/core/Grid/";
 import Scream from "../components/screams/Scream";
 import Profile from "../components/profile/Profile";
@@ -8,6 +8,8 @@ import { getScreams } from "../redux/actions/dataActions";
 import store from "../redux/store/store";
 import { getUserData } from "../redux/actions/userActions";
 import ScreamSkeleton from "../util/ScreamSkeleton";
+import SharedScream from "../components/screams/SharedScream";
+
 export class Home extends Component {
   state = {
     screams: null,
@@ -15,24 +17,38 @@ export class Home extends Component {
 
   //loadad screa
   componentDidMount() {
-    store.dispatch(getScreams());
-    store.dispatch(getUserData());
+
+this.setState({screams: this.props.data.screams},  this.props.getScreams())
   }
-  render() {
-    const { screams, loading } = this.props.data;
-    let screamMarkup = !loading ? (
-      screams ? (
-        screams.map((scream) => {
-          return <Scream key={scream.screamId} scream={scream} />;
-        })
-      ) : (
-        <p>The forest is quiet ...</p>
-      )
-    ) : (
-<ScreamSkeleton/>
+  componentWillReceiveProps(nextProps){
+    if(this.props.data.screams!==nextProps.data.screams) {
+      this.setState({screams: nextProps.data.screams})
+    }
+  }
+ screamMarkup = ()=> {
+    if (!this.props.data.loading){
+      if(this.props.data.screams) {
+        this.props.data.screams.forEach((scream, index) => {
+          return (
+           <Scream key={index} scream={scream} />
+        )})
+      } else return (
+      <p>The forest is quiet ...</p>
     );
+  } else return (
+<ScreamSkeleton/>
+  );}
+  render() {
+    const { loading } = this.props.data;
+    const {screams} = this.state;
+   const screamMarkup = loading? <div>Loading...</div> : (screams ? 
+ screams.map((scream, index)=>(
+   scream.sharedPost ? <SharedScream key={index} scream={scream} /> : 
+       <Scream key={index} scream={scream} />
+     )) : <ScreamSkeleton />
+   )
     return (
-      <Grid container spacing={5} alignItems="center">
+      <Grid container spacing={3} alignItems="center">
         <Grid item sm={8} xs={12}>
           {screamMarkup}
         </Grid>

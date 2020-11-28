@@ -35,6 +35,7 @@ import {
 import EditScream from "./EditScream";
 import { Divider } from "@material-ui/core";
 import SharePost from "../../util/SharePost";
+import Scream from "./Scream";
 
 //*Extend dayjs to use relativetime
 dayjs.extend(relativeTime);
@@ -81,7 +82,7 @@ const styles = {
   },
 };
 
-class Scream extends Component {
+class SharedScream extends Component {
   state = {
     open: false,
     oldPath: "",
@@ -117,12 +118,12 @@ class Scream extends Component {
         likeCount,
         commentCount,
         author,
+        sharedPost,
       },
-      shared,
       user: {
         authenticated, likes,
         credentials: { handle },
-      },
+      }, 
     } = this.props;
     const likedScream =likes.filter(like=>like.screamId===screamId).length !==0
     return (
@@ -174,8 +175,9 @@ class Scream extends Component {
                 alt="Post foto"
               />
             )}
+            <Scream scream={sharedPost} shared />
           </Typography>
-       {!shared &&<div className={classes.footer}>
+          <div className={classes.footer}>
             <LikeButton authenticated={authenticated} screamId={screamId} likedScream={likedScream}>
               {likeCount} {"   "}
             </LikeButton>
@@ -207,13 +209,12 @@ class Scream extends Component {
             open={this.state.open}
           />
                     </div>
-  }
         </CardContent>
       </Card>
     );
   }
 }
-Scream.propTypes = {
+SharedScream.propTypes = {
   openDialog: PropTypes.bool,
   user: PropTypes.object.isRequired,
   likeScream: PropTypes.func.isRequired,
@@ -234,4 +235,4 @@ const mapActionsToProps = {
 export default connect(
   mapStateToProps,
   mapActionsToProps
-)(withStyles(styles)(Scream));
+)(withStyles(styles)(SharedScream));

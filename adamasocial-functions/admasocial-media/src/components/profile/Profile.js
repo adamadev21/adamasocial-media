@@ -28,7 +28,7 @@ import ProfileSkeleton from '../../util/ProfileSkeleton';
 const styles = (theme) => ({
   paper: {
     padding: 20,
-    position: "absolute",
+    position: "fixed",
     top: "10%"
   },
   profile: {

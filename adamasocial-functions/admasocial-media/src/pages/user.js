@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Profile from "../components/profile/Profile";
 import store from "../redux/store/store";
+import LikedScreams from "../components/profile/LikedScreams";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -85,9 +86,8 @@ class user extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, user, data: {screams, loading} } = this.props;
     const { screamIdParam } = this.state;
-    const { screams, loading } = this.props.data;
     const screamsMarkup = loading ? (
       <p> Please wait while we are loading the stuff</p>
     ) : screams === null || screams.length === 0 ? (
@@ -112,7 +112,7 @@ class user extends Component {
           >
             <Tab label="Screams" {...a11yProps(0)} />
             <Tab label="Likes" {...a11yProps(1)} />
-            <Tab label="Profile" {...a11yProps(2)} />{" "}
+            <Tab label="Media" {...a11yProps(2)} />{" "}
             <Tab label="Profile" {...a11yProps(3)} />
           </Tabs>
         </AppBar>
@@ -127,8 +127,16 @@ class user extends Component {
           </Grid>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Typography>Likes</Typography>
-        </TabPanel>{" "}
+        <Grid container spacing={10}>
+            <Grid item xs={8}>
+            <LikedScreams user={user} />
+            </Grid>
+            <Grid item xs={4}>
+              <Profile user={this.props.user} />
+            </Grid>
+          </Grid>
+
+          </TabPanel>{" "}
         <TabPanel value={value} index={2}>
           <Typography>Media</Typography>
         </TabPanel>

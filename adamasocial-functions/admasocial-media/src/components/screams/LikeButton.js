@@ -7,32 +7,28 @@ import PropTypes from "prop-types";
 //*Icons again!
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
-export class LikeButton extends Component {
-  likedScream = () => {
-    if (
-      this.props.user.likes &&
-      this.props.user.likes.find(
-        (like) => like.screamId === this.props.screamId
-      )
-    ) {
-      return true;
-    } else return false;
-  };
+
+ class LikeButton extends Component {
+ 
   likeScream = () => {
     this.props.likeScream(this.props.screamId);
   };
   unlikeScream = () => {
     this.props.unlikeScream(this.props.screamId);
   };
+  componentDidMount(){
+    console.log(this.props)
+  }
   render() {
-    const { authenticated } = this.props;
+    const { authenticated, likedScream, user:{likes}, screamId } = this.props;
+
     const likeButton = !authenticated ? (
       <Link to="/login">
         <Button>
           <FavoriteBorder color="primary" />
           <span style={{marginLeft: 15}}>{this.props.children} </span>        </Button>
       </Link>
-    ) : this.likedScream() ? (
+    ) : likedScream? (
       <Button onClick={this.unlikeScream}>
         <FavoriteIcon color="primary" />  <span style={{marginLeft: 15}}>{this.props.children} </span>
       </Button>

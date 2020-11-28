@@ -7,7 +7,10 @@ import {
   DELETE_SCREAM,
   POST_SCREAM,
   SET_SCREAM,
-MARK_NOTIFICATIONS_READ} from "../../utils/types";
+MARK_NOTIFICATIONS_READ,
+EDIT_POST,
+DELETE_COMMENT,
+SHARE_SCREAM} from "../../utils/types";
 
 const initialState = {
   screams: [],
@@ -33,36 +36,61 @@ const dataReducer = (state = initialState, action) => {
         ...state,
         screams: [action.payload, ...state.screams],
       };
+    case EDIT_POST:
+      const screamId = action.payload.screamId;
+      const screamIndex = state.screams.findIndex(scream=> scream.screamId===screamId);
+      const updatedScreams= [...state.screams]
+      updatedScreams[screamIndex]=action.payload
+      return {
+        ...state,
+        screams: updatedScreams
+      }
     case DELETE_SCREAM:
       let index = state.screams.find(
-        (scream) => scream.screamId !== action.payload.screamId
+        (scream) => scream.screamId === action.payload.screamId
       );
       state.screams.splice(index, 1);
       return {
         ...state,
       };
+    case DELETE_COMMENT:
+      const commentCount = state.scream.commentCount--;
+      const comments = [...state.scream.comments].filter(comment=>comment.commentId!==action.payload)
+      return {
+        ...state, scream: {...state.scream, commentCount: commentCount, comments}
+      }
     case LIKE_SCREAM:
     case UNLIKE_SCREAM:
       let indextoUpdate = state.screams.findIndex(
         (scream) => scream.screamId === action.payload.screamId
       );
-      state.screams[indextoUpdate] = action.payload;
-      if (state.scream.screamId === action.payload.screamId) {
-        state.scream = action.payload;
-      }
+      const screamCopy = [...state.screams]
+      screamCopy[indextoUpdate] = action.payload;
+     return {
+       ...state, screams: screamCopy, scream: {...state.scream, likeCount: action.payload.likeCount}
+     }
     case SET_SCREAM:
       return {
         ...state,
         scream: action.payload,
       };
     case SUBMIT_COMMENT:
+const theIndex =  state.screams.findIndex(sc=>sc.screamId===action.payload.screamId);
+const screamsCopy = [...state.screams]
+screamsCopy[theIndex].commentCount ++;
       return {
         ...state,
         scream: {
           ...state.scream,
           comments: [ action.payload, ...state.scream.comments,],
+          commentCount: state.scream.commentCount+1
         },
+        screams: screamsCopy
       };
+    case SHARE_SCREAM:
+      return {
+        ...state, screams: [action.payload, ...state.screams]
+      }
  
     default:
       return state;

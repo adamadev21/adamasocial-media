@@ -13,6 +13,8 @@ const {
   likeScream,
   deleteScream,
   unlikeScream,
+  updateScream,
+  sharePost,
 } = require('./handlers/screams/screams');
 const { login } = require('./handlers/users/login');
 const { signup } = require('./handlers/users/signup');
@@ -23,17 +25,19 @@ const {
   getScream,
   getusUserDetails,
   markNotificationsRead,
+  getLikes,
 } = require('./handlers/users/userInfo');
-const { postComment } = require('./handlers/screams/comments/comments');
+const { postComment, deleteComment } = require('./handlers/screams/comments/comments');
 const admin = require('./utilities/admin');
 const { db } = require('./utilities/admin');
 
 //*Allow cross origin resource sharing
 const cors = require("cors");
-const { sendMessage, getMessages, getOneConversation, getFriends } = require('./handlers/screams/messages/messages');
+const { sendMessage, getOneConversation, getFriends } = require('./handlers/screams/messages/messages');
 const options = {
   origin: "http://localhost:3000",
   credentials: true,
+  optionsSuccessStatus: 200,
 }
 app.all("*", cors(options))
 //*===================>
@@ -46,7 +50,10 @@ app.get('/scream/:screamId', getScream);
 app.get('/scream/:screamId/like', FBAuth, likeScream);
 app.get('/scream/:screamId/unlike', FBAuth, unlikeScream);
 app.get('/scream/:screamId/delete', FBAuth, deleteScream);
+app.post('/screams/:screamId/edit', FBAuth, updateScream);
+app.post('/screams/:screamId/share', FBAuth, sharePost);
 app.post('/scream/:screamId/comment', FBAuth, postComment);
+app.delete('/scream/comments/:commentId/delete', FBAuth, deleteComment);
 //*user routes
 app.post('/signup', signup);
 app.post('/login', login);
@@ -54,6 +61,7 @@ app.post('/user/image', FBAuth, uploadImage);
 app.post('/user', FBAuth, addUserDetails);
 app.get('/user', FBAuth, getAuthenticatedUser);
 app.get('/user/:handle', getusUserDetails);
+app.get('/users/:handle/likedScreams', getLikes);
 app.get('notifications', FBAuth, markNotificationsRead)
 //* sending and receiving private messages
 app.post(`/messages/send/:recipient`, FBAuth, sendMessage)

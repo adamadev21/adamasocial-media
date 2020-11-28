@@ -23,7 +23,7 @@ import ChatIcon from "@material-ui/icons/Chat";
 //* Redux yella
 import { connect } from "react-redux";
 import { getOneScream, unlikeScream } from "../../redux/actions/dataActions";
-import Comments from "./Comments";
+import Comment from "./Comments";
 import store from "../../redux/store/store";
 import LikeButton from "./LikeButton";
 import CommentButton from "./CommentButton";
@@ -50,8 +50,7 @@ const styles = (theme) => ({
     left: "90%",
   },
   expandButton: {
-   position: "absolute",
-  left: "60%",
+
   //   top: '50%',
 
   },
@@ -67,17 +66,7 @@ const styles = (theme) => ({
 });
 class ScreamDialog extends Component {
 
-  componentDidMount() {
-      this.props.getOneScream(this.props.screamId); 
-  }
-  shouldComponentUpdate(nextState, nextProps){
-    if (nextState !==this.props){
-      return true
-    }
-  }
-  componentDidUpdate(){
-    console.log(this.props)
-  }
+
   render() {
     const {
       authenticated,
@@ -98,7 +87,11 @@ class ScreamDialog extends Component {
         commentCount,
       },
       UI: { loading },
+      user, likedScream
     } = this.props;
+    const commentMarkup = comments ? comments.map((comment,index)=>(
+  <Comment  comment={comment} user={user}/>
+    )) : null
     const dialogMarkup = loading ? (
       <div className={classes.spinnerDiv}>
         <CircularProgress size={200} thickness={3} />
@@ -130,7 +123,7 @@ class ScreamDialog extends Component {
           <img src={pictureUrl}/>
           <Typography variant="body1" className={classes.body}>{body}</Typography>
           <Fragment>
-            <LikeButton screamId={screamId}authenticated={authenticated}>{likeCount}</LikeButton> 
+            <LikeButton likedScream={likedScream} screamId={screamId}authenticated={authenticated}>{likeCount}</LikeButton> 
             <CommentButton >{commentCount}</CommentButton>
           </Fragment>
           <CommentForm screamId={screamId} />
@@ -146,6 +139,7 @@ class ScreamDialog extends Component {
           </IconButton>
         </Tooltip>
         <Dialog
+        
           open={open}
           onClose={handleClose}
           fullWidth
@@ -162,7 +156,10 @@ class ScreamDialog extends Component {
           <DialogContent className={classes.dialogContent}>
             {/* //*This displays the recent comments if any */}
             {dialogMarkup}
-            <Comments screamId={screamId} comments={comments ? comments : []} />
+            <Fragment >
+            {commentMarkup}
+            </Fragment>
+
           </DialogContent>
         </Dialog>
       </Fragment>
@@ -181,7 +178,7 @@ const mapStateToProps = (state) => {
   return {
     scream: state.data.scream,
     UI: state.UI,
-    user: state.user.credentials,
+    user: state.user,
   };
 };
 const mapActionsToProps = {

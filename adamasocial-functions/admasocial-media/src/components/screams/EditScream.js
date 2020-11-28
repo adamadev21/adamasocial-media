@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 //* Redux imports
-import { postScream } from "../../redux/actions/dataActions";
+import { editScream } from "../../redux/actions/dataActions";
 
 //*MUI stuff
 import DialogContent from "@material-ui/core/DialogContent";
@@ -13,10 +13,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/Button";
-import AddIcon from "@material-ui//icons/Add";
 import Tooltip from "@material-ui/core/Tooltip";
-import { Input, InputAdornment } from "@material-ui/core";
-import { CloudUpload, PhotoLibrary } from "@material-ui/icons";
+import { Edit, PhotoLibrary } from "@material-ui/icons";
 import { storage } from "../../util/firebase";
 
 const styles = {
@@ -30,12 +28,12 @@ const styles = {
     display: "",
   },
 };
-class PostScream extends Component {
+class EditScream extends Component {
   state = {
     open: false,
     errors: {},
-    body: "",
-    imageUrl: null,
+    body: this.props.postBody,
+    imageUrl: this.props.imageUrl,
   };
   componentWillReceiveProps(nextProps) {
     if (nextProps.UI.errors) {
@@ -43,12 +41,11 @@ class PostScream extends Component {
     }
   }
   handleSubmit = (event) => {
-    const newScream = {
-      body: this.state.body,
-      author: this.props.fullName,
-      imageUrl: this.state.imageUrl,
-    };
-    this.props.postScream(newScream);
+    const  newScream ={
+        updatedBody: this.state.body,
+        imageUrl: this.state.imageUrl,
+      }
+       this.props.editScream(this.props.screamId, newScream);
     this.handleClose();
     event.preventDefault();
   };
@@ -71,10 +68,10 @@ class PostScream extends Component {
   };
   handleUpload = (event) => {
     const image = event.target.files[0];
-    const fileName = `${Math.round(Math.random() * 10000000)}.png`;
+    const fileName  = `${Math.round(Math.random()*10000000)}.png`
     const ref = storage.ref(`images/${fileName}`);
     ref.put(image).on(
-      "changed_state0",
+      "changed_state",
       (snapshot) => console.log(snapshot.bytesTransferred),
       (err) => console.log(err),
       () => ref.getDownloadURL().then((url) => this.setState({ imageUrl: url }))
@@ -86,18 +83,12 @@ class PostScream extends Component {
       UI: { loading },
     } = this.props;
     const { errors } = this.state;
-    const image = this.state.imageUrl ? (
-      <div
-        dangerouslySetInnerHTML={{
-          __html: `<img src=${this.state.imageUrl} />`,
-        }}
-      />
-    ) : null;
+    const image =this.state.imageUrl ? <div dangerouslySetInnerHTML={{ __html: `<img src=${this.state.imageUrl} />`}} /> : null
     return (
       <Fragment>
-        <Tooltip title="Add a scream" color="primary">
-          <IconButton style={{ color: "white" }} onClick={this.handleOpen}>
-            <AddIcon />
+        <Tooltip title="Edit a scream" color="primary">
+          <IconButton onClick={this.handleOpen}>
+            <Edit />
           </IconButton>
         </Tooltip>
 
@@ -107,7 +98,7 @@ class PostScream extends Component {
           fullWidth
           maxWidth="sm"
         >
-          <DialogTitle>Post A New Scream </DialogTitle>
+          <DialogTitle>Edit Scream </DialogTitle>
           <DialogContent>
             <form className={classes.formField}>
               <TextField
@@ -115,14 +106,14 @@ class PostScream extends Component {
                 name="body"
                 label="New Scream"
                 multiline
-                autoFocus
+                error={errors ? true : false}
                 rows={4}
                 variant="outlined"
                 value={this.state.body}
                 onChange={this.handleChange}
                 className={classes.textField}
                 contentEditable
-                placeholder="Post something inspiring"
+                placeholder='Type something'
                 fullWidth
               ></TextField>{" "}
               <input
@@ -133,21 +124,12 @@ class PostScream extends Component {
                 accept="image/*"
                 style={{ display: "none" }}
               />{" "}
-              <IconButton color="secondary" onClick={this.handleImage}>
-                <CloudUpload /> Upload Image
-                <PhotoLibrary
-                color="secondary"
+              <img  style={{display: "block", height: 100, width: 150}} src={this.state.imageUrl} alt="Photo will appear here" hidden={this.state.imageUrl ? false : true}/>
+              <PhotoLibrary
+                onClick={this.handleImage}
+                style={{ bottom: "10%", marginTop: 30, position: "absolute" }}
+                color="primary"
               />
-              </IconButton>
-              {this.state.imageUrl && (
-                <img
-                  style={{ display: "block", height: 100, width: 150 }}
-                  src={this.state.imageUrl}
-                  alt="Photo will appear here"
-                  hidden={this.state.imageUrl ? false : true}
-                />
-              )}
-
             </form>
           </DialogContent>
           <DialogActions>
@@ -155,9 +137,9 @@ class PostScream extends Component {
               {" "}
               Cancel
             </Button>
-            <Button onClick={this.handleSubmit} color="secondary" variant='contained'>
+            <Button onClick={this.handleSubmit} color="secondary">
               {" "}
-              Post
+              Save
             </Button>
           </DialogActions>
         </Dialog>
@@ -166,9 +148,9 @@ class PostScream extends Component {
   }
 }
 
-PostScream.propTypes = {
+EditScream.propTypes = {
   classes: PropTypes.object.isRequired,
-  postScream: PropTypes.func.isRequired,
+  editScream: PropTypes.func.isRequired,
   UI: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => {
@@ -178,9 +160,9 @@ const mapStateToProps = (state) => {
   };
 };
 const mapActionsToProps = {
-  postScream,
+  editScream,
 };
 export default connect(
   mapStateToProps,
   mapActionsToProps
-)(withStyles(styles)(PostScream));
+)(withStyles(styles)(EditScream));

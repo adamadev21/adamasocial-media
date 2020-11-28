@@ -70,7 +70,7 @@ exports.getAuthenticatedUser = (req, res) => {
     .then((data) => {
       userData.likes = [];
       data.forEach((doc) => {
-        userData.likes.push(doc);
+        userData.likes.push(doc.data());
       });
       return db
         .collection("notifications")
@@ -103,13 +103,18 @@ exports.getAuthenticatedUser = (req, res) => {
 //*Get any users information
 exports.getusUserDetails = (req, res) => {
   let userData = {};
-  //*Get the user using their handle
+  //*Get the user using their
+  const likes = [];
+  db.collection("likes")
+    .where("userHandle", "==", req.params.handle)
+    .get()
+    .then((data) => data.forEach((doc) => likes.push(doc.data().screamId)));
   db.doc(`/users/${req.params.handle}`)
     .get()
     .then((doc) => {
       if (doc.exists) {
         userData.user = doc.data();
-        //* Get their screams
+        //* Get their
         return db
           .collection("screams")
           .where("userHandle", "==", req.params.handle)
@@ -117,21 +122,21 @@ exports.getusUserDetails = (req, res) => {
           .get()
           .then((data) => {
             userData.screams = [];
-            
             //* Get all comments for this scream
             data.forEach((doc) => {
-              let comments=[];
-//*For each scream, try adding a collection of comments
-          db.collection("comments").where("screamId","==", doc.id).get()
-          .then(data=>{
-            //*if you get the comments, push it in the empty comment array
-            data.forEach(com=>{
-              console.log("comment is", com.data())
-              comments.push(com.data())
-            });
-            console.log(comments)
-            return comments
-          }).catch(err=>console.log(err))
+              let comments = [];
+              //*For each scream, try adding a collection of comments
+              db.collection("comments")
+                .where("screamId", "==", doc.id)
+                .get()
+                .then((data) => {
+                  //*if you get the comments, push it in the empty comment array
+                  data.forEach((com) => {
+                    console.log("comment is", com.data());
+                    comments.push(com.data());
+                  });
+                  return comments;
+                });
               userData.screams.push({
                 body: doc.data().body,
                 createdAt: doc.data().createdAt,
@@ -143,8 +148,12 @@ exports.getusUserDetails = (req, res) => {
                 commentCount: doc.data().commentCount,
                 comments: comments,
               });
+              const liked= [...userData.screams].filter(
+                (scream) => likes.includes(scream.screamId)
+              );
+              userData.likedScreams = liked
             });
-            return res.json(userData);
+            return res.status(200).json(userData)
           })
           .catch((err) => {
             console.error(err);
@@ -198,5 +207,37 @@ exports.getScream = (req, res) => {
     .catch((err) => {
       console.error(err);
       res.status(500).json({ error: err.code });
+    });
+};
+
+//*Get user's liked screams
+
+exports.getLikes = (req, res) => {
+  const handle = req.params.handle;
+  let screams = [];
+  //*get the user's document and take their likes : {handle, screamid}
+  db.collection("likes")
+    .where("userHandle", "==", handle)
+    .get()
+    .then((data) => {
+      const likes = [];
+      data.forEach((doc) => {
+        likes.push(doc.data().screamId);
+      });
+      console.log(likes);
+      return db
+        .collection("screams")
+        .where("screamId", "in", likes)
+        .get()
+        .then((docs) => {
+          docs.forEach((doc) => screams.push(doc.data()));
+        });
+    })
+    .then(() => {
+      console.log(screams);
+      return res.status(200).json(screams);
+    })
+    .catch((err) => {
+      console.error(err);
     });
 };

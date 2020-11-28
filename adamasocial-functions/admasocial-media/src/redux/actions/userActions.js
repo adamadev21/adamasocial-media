@@ -2,7 +2,7 @@ import axios from 'axios';
 import {
   LOADING_UI,
 MARK_NOTIFICATIONS_READ,
-  SET_ERRORS,
+  SET_ERRORS, SET_LIKED_SCREAMS,
   CLEAR_ERRORS,GET_FRIENDS,
   SET_UNAUTHENTICATED,
   SET_USER, LOADING_USER, SET_SCREAMS, STOP_LOADING_UI, SEND_MESSAGE, GET_MESSAGES
@@ -48,7 +48,6 @@ export const signupUser = (newUserData, history) => (dispatch) => {
     });
 };
 export const getUserData = () => (dispatch) => {
-  dispatch({type: LOADING_USER})
   axios
     .get('/user')
     .then((res) => {
@@ -155,5 +154,19 @@ export const getAllMessages = (friend)=> dispatch=>{
   .catch(err=>{
     console.log(err);
     dispatch({type: GET_MESSAGES, payload: []})
+  })
+}
+
+//*Get liked screamse
+export const getLikedScreams = (userHandle)=>dispatch=>{
+  dispatch({type: LOADING_UI});
+  axios.get(`/users/${userHandle}/likedScreams`)
+  .then(res=>{
+    dispatch({type: SET_LIKED_SCREAMS, payload: res.data})
+    dispatch({type: STOP_LOADING_UI})
+  })
+  .catch(err=>{
+    dispatch({type: STOP_LOADING_UI});
+    console.log(err)
   })
 }

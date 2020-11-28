@@ -4,7 +4,7 @@ SET_AUTHENTICATED,
 GET_FRIENDS,
 SET_UNAUTHENTICATED,
 SET_USER,
-LOADING_USER, LIKE_SCREAM, UNLIKE_SCREAM, MARK_NOTIFICATIONS_READ, SEND_MESSAGE, GET_MESSAGES
+LOADING_USER, LIKE_SCREAM, UNLIKE_SCREAM, MARK_NOTIFICATIONS_READ, SEND_MESSAGE, GET_MESSAGES, SET_LIKED_SCREAMS
 } from '../../utils/types';
 
 const initialState = {
@@ -15,7 +15,8 @@ const initialState = {
     notifications: [],
     comments: [],
 messages: [],
-friends: []
+friends: [],
+likedScreams: []
 };
 
 const userReducer = (state=initialState, action)=>{
@@ -54,7 +55,11 @@ const userReducer = (state=initialState, action)=>{
              
              return {
                  ...state, notifications : state.notifications.forEach(not => not.read = true)
-             }
+             };
+        case SET_LIKED_SCREAMS:
+            return {
+                ...state, likedScreams: action.payload
+            }
         case SEND_MESSAGE:
             return {
                 ...state,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom/index';
 import axios from 'axios'
@@ -18,7 +18,7 @@ import AuthRoute from './util/authRoute';
 
 //*Redux imports
 import store from './redux/store/store';
-import {Provider} from 'react-redux';
+import {connect, Provider} from 'react-redux';
 import { SET_AUTHENTICATED } from './redux/utils/types';
 import { logoutUser, getUserData, getFriends } from './redux/actions/userActions';
 import user  from './pages/user';
@@ -29,19 +29,21 @@ axios.defaults.baseURL = "http://localhost:5006/admasocial-media/us-central1/api
 const theme = createMuiTheme(themeFile);
 
 const token = localStorage.FBIdToken;
-if (token) {
-  const decodedToken = jwtDecode(token);
-  if (decodedToken.exp * 1000 < Date.now()){
 
-store.dispatch(logoutUser());
-window.location.href = '/login'
-} else {
-  store.dispatch({type: SET_AUTHENTICATED});
-  store.dispatch(getUserData());
-  axios.defaults.headers.common['Authorization'] = token;
-}}
-
-function App() {
+class App extends Component {
+  componentDidMount(){
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.exp * 1000 < Date.now()){
+    store.dispatch(logoutUser());
+    window.location.href = '/login'
+    } else {
+      store.dispatch({type: SET_AUTHENTICATED});
+      axios.defaults.headers.common['Authorization'] = token;
+            store.dispatch(getUserData());
+    }}
+  }
+render() {
   return (
     <Provider store={store}>
  <MuiThemeProvider theme={theme}>
@@ -64,5 +66,5 @@ function App() {
     </Provider>
    
   );
-}
+}}
 export default App;

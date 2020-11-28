@@ -1,4 +1,4 @@
-import {  STOP_LOADING_UI, DELETE_SCREAM, LIKE_SCREAM, LOADING_DATA, LOADING_UI, POST_SCREAM, SET_ERRORS, SET_SCREAM , SET_SCREAMS, UNLIKE_SCREAM, SUBMIT_COMMENT} from "../utils/types"
+import {  EDIT_POST, STOP_LOADING_UI, DELETE_SCREAM, LIKE_SCREAM, LOADING_DATA, LOADING_UI, POST_SCREAM, SET_ERRORS, SET_SCREAM , SET_SCREAMS, UNLIKE_SCREAM, SUBMIT_COMMENT, DELETE_COMMENT, SHARE_SCREAM} from "../utils/types"
 import axios from 'axios'
 //*Get all screams
 export const getScreams = ()=> (dispatch)=>{
@@ -100,4 +100,36 @@ axios.post(`/scream/${screamId}/comment`, newComment)
 .catch(err=>{
     console.log(err)
 })
+}
+
+//* delete scream
+export const deleteComment = (commentId)=>dispatch=>{
+    axios.delete(`/scream/comments/${commentId}/delete`).then(res=>{
+        dispatch({type: DELETE_COMMENT, payload: commentId})
+    })
+    .catch(error=>{
+        console.log(error)
+    })
+}
+//* Edit scream
+export const editScream = (screamId, updatedPost)=> dispatch=>{
+    dispatch({type: LOADING_UI});
+    axios.post(`/screams/${screamId}/edit`, updatedPost).then(res=>{
+        dispatch({type: EDIT_POST, payload: res.data});
+        dispatch({type: STOP_LOADING_UI});
+    })
+    .catch(error=>{
+        console.log(error);
+
+    });
+
+}
+
+export const shareScream =(newScream)=>dispatch=>{
+    axios.post(`/screams/${newScream.screamId}/share`, newScream).then(res=>{
+        dispatch({type: SHARE_SCREAM, payload: res.data})
+    })
+    .catch(error=>{
+        console.log(error)
+    })
 }

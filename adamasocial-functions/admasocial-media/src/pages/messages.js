@@ -1,9 +1,8 @@
 import { Grid } from '@material-ui/core'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import SingleMessage from '../components/messages/SingleMessage'
 import {getFriends, sendMessage, getAllMessages} from "../redux/actions/userActions"
-import MessageList from '../components/screams/messages/MessageList'
-import SingleMessage from '../components/screams/messages/SingleMessage'
 
 export class messages extends Component {
     state = {
