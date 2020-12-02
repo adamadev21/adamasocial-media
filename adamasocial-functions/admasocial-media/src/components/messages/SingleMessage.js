@@ -105,12 +105,14 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from "@material-ui/core/Avatar";
+import IconButton from "@material-ui/core/IconButton";
 import Fab from "@material-ui/core/Fab";
 import SendIcon from "@material-ui/icons/Send";
+import {ArrowBackIos} from "@material-ui/icons";
 import MessageList from "./MessageList";
+import {getConversation, markMessageRead} from "../../redux/actions/userActions"
 import { connect } from "react-redux";
-import { grey } from "@material-ui/core/colors";
+import { blue, grey } from "@material-ui/core/colors";
 const styles = {
   table: {
     minWidth: 650,
@@ -133,7 +135,7 @@ const styles = {
   messageRight: {
     float: "right",
     color: "white",
-    background: "green",
+    background: blue[500],
     minHeight: 30,
     padding: 10,
     borderTopLeftRadius: "20px",
@@ -142,11 +144,15 @@ const styles = {
 };
 
 class SingleMessage extends Component {
-  state = { messages: [], message: "", friend: "" };
+  state = { messages: [], message: "", friend: "" , showingList: true};
+handlePage =(e)=>{
+  this.setState({showingList: !this.state.showingList})
+}
+handleOpenMessage =(friend) => {
+    this.props.getConversation(friend);
+    this.props.markMessageRead(friend)
+    this.setState({ friend, showingList: false });
 
-  setMessages = (friend) => {
-    this.props.getAllMessages(friend);
-    this.setState({ friend });
   };
   handleChange = (e) => {
     this.setState({ message: e.target.value });
@@ -159,11 +165,11 @@ class SingleMessage extends Component {
     this.props.sendMessage(this.state.friend, newMsg);
   };
   render() {
-    const messages = !this.props.messages ? [] : this.props.messages;
-    const { classes } = this.props;
-    const { friends, user } = this.props;
-
-    const messageMarkup = messages.map((message, index) => (
+    const conversation = !this.props.conversation ? [] : this.props.conversation;
+    const { classes, UI: {isMobile, loading} } = this.props;
+    const { friends, user, messages } = this.props;
+const {showingList} = this.state;
+    const messageMarkup = conversation.map((message, index) => (
       <ListItem key={index}>
         <Grid container>
           <Grid item xs={12}>
@@ -184,19 +190,25 @@ class SingleMessage extends Component {
     ));
     return (
       <div>
-        <Grid container>
-          <Grid item xs={12}>
-            <Typography variant="h5" className="header-message">
+        <Grid container spacing={2}>
+      <Grid item xs={12}>
+      {!showingList && <IconButton onClick={this.handlePage} color='primary' style={{position: "absolute", }}>
+              <ArrowBackIos />
+            </IconButton>}
+            <Typography variant={isMobile? "h6" : "h5"} className="header-message" align='center'>
               Message Center
             </Typography>
+            
           </Grid>
-        </Grid>
-        <Grid container component={Paper} className={classes.chatSection}>
-          <MessageList friends={friends} handleChat={this.setMessages} />
-          <Grid item xs={9}>
+      {showingList&& 
+      <Grid item xs={12} component={Paper} className={classes.chatSection}>
+          <MessageList loading={loading} messages= {messages} friends={friends} user={user} handleOpenMessage={this.handleOpenMessage} />
+      </Grid> }
+          {!showingList && <Grid item sm={9} xs={12}>
             <List className={classes.messageArea} >{messageMarkup}</List>
             <Divider />
-            <Grid container style={{ padding: "20px" }}>
+            </Grid>}
+            { !showingList &&  <Grid item container style={{ padding: "20px" }}>
               <Grid item xs={11}>
                 <TextField
                   value={this.state.message}
@@ -217,8 +229,7 @@ class SingleMessage extends Component {
                   <SendIcon />
                 </Fab>
               </Grid>
-            </Grid>
-          </Grid>
+      </Grid> }
         </Grid>
       </div>
     );
@@ -226,5 +237,12 @@ class SingleMessage extends Component {
 }
 const mapState = (state) => ({
   messages: state.user.messages,
+  conversation: state.user.conversation,
+  UI: state.UI,
+  user: state.user.credentials,
 });
-export default connect(mapState, null)(withStyles(styles)(SingleMessage));
+const mapActions = {
+  markMessageRead,
+  getConversation
+}
+export default connect(mapState, mapActions)(withStyles(styles)(SingleMessage));

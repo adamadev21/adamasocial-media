@@ -10,9 +10,9 @@ import { red } from "@material-ui/core/colors";
       },
       secondary: {
         light: '#ff7961',
-        main: red[500],
+        main: red[400],
         dark: '#ba000d',
-        contrastText: '#000',
+        contrastText: '#fff',
       },
     },
   }

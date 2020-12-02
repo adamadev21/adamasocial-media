@@ -56,6 +56,7 @@ exports.userDetails = {
 
 exports.getAuthenticatedUser = (req, res) => {
   let userData = {};
+  const handle = req.user.handle
   db.doc(`/users/${req.user.handle}`)
     .get()
     .then((doc) => {
@@ -92,7 +93,14 @@ exports.getAuthenticatedUser = (req, res) => {
           notificationId: doc.id,
         });
       });
-      return res.status(200).json(userData);
+      return db.collection("messages").where("recipient","==", handle).orderBy("sentAt","desc").get()
+     })
+     .then((data)=>{
+       userData.messages = [];
+       data.forEach(doc=>{
+         userData.messages.push(doc.data())
+       })
+        return res.status(200).json(userData);
     })
     .catch((err) => {
       console.error(err);

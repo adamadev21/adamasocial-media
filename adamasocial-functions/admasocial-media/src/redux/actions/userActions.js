@@ -5,7 +5,7 @@ MARK_NOTIFICATIONS_READ,
   SET_ERRORS, SET_LIKED_SCREAMS,
   CLEAR_ERRORS,GET_FRIENDS,
   SET_UNAUTHENTICATED,
-  SET_USER, LOADING_USER, SET_SCREAMS, STOP_LOADING_UI, SEND_MESSAGE, GET_MESSAGES
+  SET_USER, LOADING_USER, SET_SCREAMS, STOP_LOADING_UI, SEND_MESSAGE, GET_MESSAGES, GET_CONVERSATION, READ_MESSAGE
 } from '../utils/types';
 
 export const loginUser = (userData, history) => (dispatch) => {
@@ -145,10 +145,20 @@ export const getFriends = ()=>dispatch=>{
     dispatch({type: GET_FRIENDS, payload: []})
   })
 }
-export const getAllMessages = (friend)=> dispatch=>{
+export const getAllMessages =(friend)=>dispatch=>{
+dispatch({type: GET_CONVERSATION, payload: friend})
+}
+export const markMessageRead = (friend)=>dispatch=>{
+  axios.get(`/messages/${friend}/read`).then(res=>{
+    dispatch({type: READ_MESSAGE, payload: friend})
+  }).catch(err=>{
+    console.log(err)
+  });
+}
+export const getConversation = (friend)=> dispatch=>{
   dispatch({type:LOADING_UI});
   axios.get(`/messages/${friend}`).then(res=>{
-    dispatch({type: GET_MESSAGES, payload: res.data});
+    dispatch({type: GET_CONVERSATION, payload: res.data});
     dispatch({type: STOP_LOADING_UI})
   })
   .catch(err=>{

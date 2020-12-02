@@ -33,7 +33,7 @@ const { db } = require('./utilities/admin');
 
 //*Allow cross origin resource sharing
 const cors = require("cors");
-const { sendMessage, getOneConversation, getFriends } = require('./handlers/screams/messages/messages');
+const { sendMessage, getOneConversation, getFriends, markRead } = require('./handlers/screams/messages/messages');
 const options = {
   origin: "http://localhost:3000",
   credentials: true,
@@ -66,6 +66,7 @@ app.get('notifications', FBAuth, markNotificationsRead)
 //* sending and receiving private messages
 app.post(`/messages/send/:recipient`, FBAuth, sendMessage)
 app.get(`/messages/:friendId`, FBAuth, getOneConversation)
+app.get("/messages/:friendId/read", FBAuth, markRead)
 app.get("/messages",FBAuth, getFriends)
 exports.api = functions.https.onRequest(app);
 

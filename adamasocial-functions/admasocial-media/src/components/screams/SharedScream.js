@@ -33,7 +33,7 @@ import {
   getOneScream,
 } from "../../redux/actions/dataActions";
 import EditScream from "./EditScream";
-import { Divider } from "@material-ui/core";
+import { Avatar, Divider, Grid } from "@material-ui/core";
 import SharePost from "../../util/SharePost";
 import Scream from "./Scream";
 
@@ -46,9 +46,17 @@ const styles = {
     marginLeft: 20,
     paddingLeft: 10,
   },
+  mobileCard: {
+    fontSeize: 23,
+    display: "flex",
+    marginBottom: 5,
+    marginLeft:5,
+    paddingLeft: 10,
+
+  },
   media: {
-    minWidth: "5.5rem",
-    height: "5.5rem",
+    minWidth: "3.3rem",
+    height: "3.3rem",
     borderRadius: "50%",
   },
   content: {
@@ -56,7 +64,12 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     textDecoration: "none",
-    width: "90%",
+    width: "50rem",
+  },  mobileContent: {
+    display: "flex",
+    flexDirection: "column",
+    textDecoration: "none",
+    width: "14rem",
   },
   head: {
     display: "flex",
@@ -70,7 +83,15 @@ const styles = {
     minWidth: "80%",
     background: "rgba(0,0,0,0.02)",
     borderRadius: "4%",
+
     padding: 20,
+  }, 
+   mobileBody: {
+    minHeight: 50,
+    fontSize: "small",
+    background: "rgba(0,0,0,0.02)",
+    borderRadius: "4%",
+    padding: 10,
   },
   footer: {
     display: "flex",
@@ -119,6 +140,7 @@ class SharedScream extends Component {
         commentCount,
         author,
         sharedPost,
+        isMobile,
       },
       user: {
         authenticated, likes,
@@ -127,13 +149,17 @@ class SharedScream extends Component {
     } = this.props;
     const likedScream =likes.filter(like=>like.screamId===screamId).length !==0
     return (
-      <Card className={classes.card}>
-        <CardMedia
-          className={classes.media}
+      <Grid container className={isMobile ? classes.mobileCard : classes.card}>
+        <Grid item xs={2}>
+<Avatar  className={classes.media}
           image={userImage}
           title="Profile Name"
+        sizes={10} src={userImage}
         />
-        <CardContent className={classes.content}>
+
+        </Grid>
+         
+        <Grid item xs={10} className={isMobile? classes.mobileContent : classes.content}>
           <div className={classes.head}>
             <Typography
               variant="h6"
@@ -160,7 +186,9 @@ class SharedScream extends Component {
               {dayjs(createdAt).fromNow()}{" "}
             </Typography>
           </div>
-          <Typography variant="body1" className={classes.body}>
+          </Grid>
+          <Grid item xs={12}>
+          <Typography variant="body1" className={isMobile? classes.mobileBody : classes.body}>
             {body}
             {pictureUrl && (
               <img
@@ -175,8 +203,12 @@ class SharedScream extends Component {
                 alt="Post foto"
               />
             )}
-            <Scream scream={sharedPost} shared />
           </Typography>
+          <div style={{right:"5%", paddingLeft: 0}}>
+          <Scream scream={sharedPost} shared  isMobile={isMobile}/>
+      
+          </div>
+ 
           <div className={classes.footer}>
             <LikeButton authenticated={authenticated} screamId={screamId} likedScream={likedScream}>
               {likeCount} {"   "}
@@ -197,7 +229,7 @@ class SharedScream extends Component {
             )}
 
 
-          <ScreamDialog
+  <ScreamDialog
             authenticated={authenticated}
             screamId={screamId}
             author={author}
@@ -209,8 +241,8 @@ class SharedScream extends Component {
             open={this.state.open}
           />
                     </div>
-        </CardContent>
-      </Card>
+        </Grid>
+      </Grid>
     );
   }
 }

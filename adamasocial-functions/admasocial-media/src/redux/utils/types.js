@@ -9,6 +9,8 @@ export const CLEAR_ERRORS = "CLEAR_ERRORS"
 export const LOADING_UI = "LOADING_UI"
 export const LOADING_DATA = "LOADING_DATA"
 export const STOP_LOADING_UI = "STOP_LOADING_UI"
+export const SET_DESKTOP = "SET_DESKTOP"
+export const SET_MOBILE = "SET_MOBILE"
 
 
 //* Data types
@@ -30,3 +32,4 @@ export const GET_MESSAGES = "GET_MESSAGES"
 export const GET_FRIENDS = "GET_FRIENDS"
 export const READ_MESSAGE = "READ_MESSAGE"
 export const DELETE_MESSAGE = "DELETE_MESSAGE"
+export const GET_CONVERSATION = "GET_CONVERSATION"

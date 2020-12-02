@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom/index';
 import axios from 'axios'
+import Responsive from "react-responsive-decorator"
 //*import pages and components
 import Home from './pages/home';
 import Signup from './pages/signup';
@@ -19,7 +20,7 @@ import AuthRoute from './util/authRoute';
 //*Redux imports
 import store from './redux/store/store';
 import {connect, Provider} from 'react-redux';
-import { SET_AUTHENTICATED } from './redux/utils/types';
+import { SET_AUTHENTICATED, SET_DESKTOP, SET_MOBILE } from './redux/utils/types';
 import { logoutUser, getUserData, getFriends } from './redux/actions/userActions';
 import user  from './pages/user';
 import messages from './pages/messages';
@@ -42,6 +43,14 @@ class App extends Component {
       axios.defaults.headers.common['Authorization'] = token;
             store.dispatch(getUserData());
     }}
+    this.props.media({ minWidth: 768 }, () => {
+ store.dispatch({type: SET_DESKTOP})
+    });
+ 
+    this.props.media({ maxWidth: 768 }, () => {
+      store.dispatch({type: SET_MOBILE})
+
+    });
   }
 render() {
   return (
@@ -67,4 +76,4 @@ render() {
    
   );
 }}
-export default App;
+export default  Responsive(App);

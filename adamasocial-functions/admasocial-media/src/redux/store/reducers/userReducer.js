@@ -4,7 +4,7 @@ SET_AUTHENTICATED,
 GET_FRIENDS,
 SET_UNAUTHENTICATED,
 SET_USER,
-LOADING_USER, LIKE_SCREAM, UNLIKE_SCREAM, MARK_NOTIFICATIONS_READ, SEND_MESSAGE, GET_MESSAGES, SET_LIKED_SCREAMS
+LOADING_USER, LIKE_SCREAM, UNLIKE_SCREAM, MARK_NOTIFICATIONS_READ, SEND_MESSAGE, GET_MESSAGES, SET_LIKED_SCREAMS, READ_MESSAGE, GET_CONVERSATION
 } from '../../utils/types';
 
 const initialState = {
@@ -16,7 +16,8 @@ const initialState = {
     comments: [],
 messages: [],
 friends: [],
-likedScreams: []
+likedScreams: [],
+conversation: []
 };
 
 const userReducer = (state=initialState, action)=>{
@@ -63,7 +64,7 @@ const userReducer = (state=initialState, action)=>{
         case SEND_MESSAGE:
             return {
                 ...state,
-                messages: [ ...state.messages,action.payload]
+                conversation: [ ...state.conversation,action.payload]
             };
         case GET_MESSAGES:
             return {
@@ -72,7 +73,18 @@ const userReducer = (state=initialState, action)=>{
         case GET_FRIENDS:
             return  {
             ...state, friends: action.payload
-        }
+        };
+        case GET_CONVERSATION:
+         return {
+             ...state, conversation: action.payload
+         };
+         case READ_MESSAGE:
+             const mescop = [...state.messages]
+             mescop.forEach(ms=>{
+                 if (ms.sender===action.payload) ms.read=true })
+             return {
+                 ...state, messages: mescop
+             };
         default:
             return state;
     }

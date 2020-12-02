@@ -6,7 +6,9 @@ import {
   Typography,
   AppBar,
   Box,
+  IconButton,
 } from "@material-ui/core";
+import {Menu} from "@material-ui/icons"
 import axios from "axios";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -31,7 +33,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
+        <Box p={3} padding={.75} paddingTop={2}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -56,8 +58,19 @@ const styles = (theme) => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    margin: 30,
+    margin: 20,
   },
+  rootMobile :{
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+    margin: 5,
+    padding: 2,
+    paddingTop: 5,
+  },
+  menu:{
+    position: 'absolute',
+    left: "5%",
+  }
 });
 
 class user extends Component {
@@ -65,6 +78,7 @@ class user extends Component {
     value: 0,
     profile: null,
     screamIdParam: null,
+    open: this.props.UI.isMobile,
   };
   componentDidMount() {
     store.dispatch(getUserData());
@@ -86,25 +100,27 @@ class user extends Component {
   };
 
   render() {
-    const { classes, user, data: {screams, loading} } = this.props;
+    const { classes, user, data: {screams, loading}, UI: {isMobile} } = this.props;
     const { screamIdParam } = this.state;
     const screamsMarkup = loading ? (
       <p> Please wait while we are loading the stuff</p>
     ) : screams === null || screams.length === 0 ? (
       <p>This screamer has not screamed yet </p>
     ) : !screamIdParam ? (
-      screams.map((scream) => <Scream key={scream.screamId} scream={scream} />)
+      screams.map((scream) => <Scream isMobile={isMobile} key={scream.screamId} scream={scream} />)
     ) : (
       screams.map((scream) => {
         if (scream.screamId !== screamIdParam)
-          return <Scream key={scream.screamId} scream={scream} />;
-        else return <Scream key={scream.screamId} scream={scream} openDialog />;
+          return <Scream key={scream.screamId} scream={scream} isMobile={isMobile} />;
+        else return <Scream key={scream.screamId} scream={scream} openDialog isMobile={isMobile}/>;
       })
     );
     const { value } = this.state;
     return (
-      <div className={classes.root}>
-        <AppBar position="static" style={{ width: "65%", marginLeft: 33 }}>
+      <div className={isMobile ? classes.rootMobile : classes.root}>
+        {isMobile &&
+        <IconButton className={classes.menu} color='primary' onClick={()=>this.setState({open: !this.state.open})}><Menu/></IconButton>}
+        <AppBar position="static" style={{ width: isMobile? "100%":"65%", marginLeft: isMobile ? 2 : 33 }}>
           <Tabs
             value={value}
             onChange={this.handleChange}
@@ -117,23 +133,23 @@ class user extends Component {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <Grid container spacing={10}>
-            <Grid item xs={8}>
+          <Grid container spacing={1}>
+            <Grid item xs={12} sm={8}>
               {screamsMarkup}
             </Grid>
-            <Grid item xs={4}>
-              <Profile user={this.props.user} />
-            </Grid>
+            {!isMobile || this.state.open && <Grid item sm={4}>
+              <Profile user={this.props.user} /> 
+        </Grid> }
           </Grid>
         </TabPanel>
         <TabPanel value={value} index={1}>
-        <Grid container spacing={10}>
-            <Grid item xs={8}>
+        <Grid container spacing={1}>
+            <Grid item xs={12} sm={8}>
             <LikedScreams user={user} />
             </Grid>
-            <Grid item xs={4}>
-              <Profile user={this.props.user} />
-            </Grid>
+            {!isMobile &&     <Grid item sm={4}>
+  <Profile user={this.props.user} />
+        </Grid> }
           </Grid>
 
           </TabPanel>{" "}
@@ -157,6 +173,7 @@ user.propTypes = {
 };
 const mapStateToProps = (state) => ({
   user: state.user,
+  UI: state.UI,
   data: state.data,
 });
 const mapActionsToProps = {

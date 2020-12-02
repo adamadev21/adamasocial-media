@@ -9,17 +9,17 @@ import store from "../redux/store/store";
 import { getUserData } from "../redux/actions/userActions";
 import ScreamSkeleton from "../util/ScreamSkeleton";
 import SharedScream from "../components/screams/SharedScream";
-
+import Responsive from 'react-responsive-decorator';
 export class Home extends Component {
   state = {
     screams: null,
+
   };
-
-  //loadad screa
   componentDidMount() {
-
+    
 this.setState({screams: this.props.data.screams},  this.props.getScreams())
   }
+  //loadad screa
   componentWillReceiveProps(nextProps){
     if(this.props.data.screams!==nextProps.data.screams) {
       this.setState({screams: nextProps.data.screams})
@@ -41,19 +41,20 @@ this.setState({screams: this.props.data.screams},  this.props.getScreams())
   render() {
     const { loading } = this.props.data;
     const {screams} = this.state;
-   const screamMarkup = loading? <div>Loading...</div> : (screams ? 
+    const { isMobile} = this.props.UI;
+   const screamMarkup = !screams ? <div>The forest is quiet...</div> : (!loading ? 
  screams.map((scream, index)=>(
-   scream.sharedPost ? <SharedScream key={index} scream={scream} /> : 
-       <Scream key={index} scream={scream} />
+   scream.sharedPost ? <SharedScream isMobile={isMobile} key={index} scream={scream} /> : 
+       <Scream key={index} scream={scream} isMobile={isMobile} />
      )) : <ScreamSkeleton />
    )
     return (
       <Grid container spacing={3} alignItems="center">
-        <Grid item sm={8} xs={12}>
+        <Grid item sm={8} xs={12} wrap>
           {screamMarkup}
-        </Grid>
+        </Grid> 
         <Grid item sm={4} xs={12}>
-          <Profile />
+         {!isMobile && <Profile />}
         </Grid>
       </Grid>
     );
@@ -66,9 +67,10 @@ Home.propTypes = {
 };
 const mapStateToProps = (state) => ({
   data: state.data,
+  UI: state.UI,
 });
 const mapActionsToProps = {
   getScreams,
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(Home);
+export default connect(mapStateToProps, mapActionsToProps)(Home)

@@ -29,7 +29,10 @@ const styles = (theme) => ({
   paper: {
     padding: 20,
     position: "fixed",
-    top: "10%"
+    top: "10%",
+    '& @media only screen and (max-width: 786px)':{
+      display: "none"
+    }
   },
   profile: {
     '& .image-wrapper': {

@@ -60,7 +60,7 @@ exports.getFriends = (req, res) => {
     .then((data) => {
       let friends = [];
       data.forEach((doc) => {
-    friends.push(doc.data())
+        if(doc.data().handle!==user)  friends.push(doc.data())
       })
       return res.status(200).json(friends);
     })
@@ -121,6 +121,22 @@ exports.getOneConversation = (req, res) => {
       console.error(error);
     });
 };
+
+exports.markRead = (req, res)=>{
+  const handle = req.user.handle;
+  const friend = req.params.friendId;
+  db.collection("messages").where("sender", "==", friend).where("recipient", '==', handle).get()
+  .then(data=>{
+    data.forEach(doc=>{
+      doc.ref.update({read: true, readAt: new Date().toISOString()})
+    });
+     return res.status(200).json({readAt: new Date().toISOString()})
+  })
+  .catch(err=>{
+    console.error(err)
+    return res.status(500).json({error: err.code})
+  })
+}
 exports.addFriend = (req, res) => {};
 
 

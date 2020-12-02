@@ -1,8 +1,9 @@
-import { CLEAR_ERRORS, LOADING_UI, SET_ERRORS , STOP_LOADING_UI} from "../../utils/types"
+import { SET_MOBILE, SET_DESKTOP, CLEAR_ERRORS, LOADING_UI, SET_ERRORS , STOP_LOADING_UI} from "../../utils/types"
 
 const initialState = {
     loading: false,
-    errors: null
+    errors: null,
+    isMobile: false,
 }
 const uiReducer = (state=initialState, action) => {
     switch(action.type) {
@@ -20,6 +21,12 @@ const uiReducer = (state=initialState, action) => {
             return {
                 ...state, loading: true,
             };
+        case SET_MOBILE:
+            return {
+                ...state, isMobile: true
+            }
+        case SET_DESKTOP:
+            return {...state, isMobile: false}
         case STOP_LOADING_UI:
             return {
                 ...state, loading: false

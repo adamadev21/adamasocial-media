@@ -11,15 +11,16 @@ import HomeIcon from '@material-ui/icons/Home';
 import OfflineBolt from '@material-ui/icons/OfflineBolt';
 import PostScream from '../screams/PostScream';
 import NotificationIcon  from './NotificationIcon';
-import { Email, Message } from '@material-ui/icons';
+import { Email, Message, AccountCircleRounded } from '@material-ui/icons';
+import { Badge , IconButton} from '@material-ui/core';
 
 export class Navbar extends Component {
   render() {
-    const { authenticated } = this.props;
+    const { user: {messages, authenticated} , UI: {isMobile}} = this.props;
     return (
       <div className="" style={{ justifyContent: 'center' }}>
-        <AppBar>
-          <Toolbar style={{ justifyContent: 'center' }}>
+        <AppBar position='static'>
+          <Toolbar style={{ justifyContent: 'center' , position: isMobile ? "static" : "unset"}}>
             {authenticated ? (
               <Fragment>
                
@@ -28,12 +29,25 @@ export class Navbar extends Component {
                  <Button component={Link} to="/" color="secondary" style={{color: "white"}}>
                   <HomeIcon />
                 </Button>
-                <Button style={{color: "white"}}>
-                  <NotificationIcon />
-                </Button>
+           <Button>
+             <NotificationIcon />
+           </Button>
                 <Button component={Link} to="/messages" style={{color: "white"}}>
-                  <Email />
+               
+                  <Badge
+              style={{color: "white"}}
+              
+              badgeContent={
+                messages.filter((not) => not.readAt === null).length
+              }
+              color="secondary"
+            >
+   <Email />
+            </Badge>
                 </Button>
+                <IconButton component={Link} to={`/my-account`} color='primary'  >
+                  <AccountCircleRounded style={{color: "white"}}/>
+                </IconButton>
               </Fragment>
             ) : (
               <Fragment>
@@ -53,7 +67,8 @@ export class Navbar extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  authenticated: state.user.authenticated,
+  user: state.user,
+  UI:state.UI
 });
 
 export default connect(mapStateToProps, { logoutUser })(Navbar);
