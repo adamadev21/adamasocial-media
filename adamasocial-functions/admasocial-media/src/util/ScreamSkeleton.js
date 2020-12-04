@@ -1,8 +1,9 @@
-import { Card, CardContent, CardMedia } from '@material-ui/core'
+import { Card, CardContent, CardMedia, Grid } from '@material-ui/core'
 import React, { Component, Fragment } from 'react'
 import noImg from '../myImages/noImg.png'
 import withStyles from '@material-ui/styles/withStyles'
 import PropTypes from 'prop-types'
+import { Skeleton } from '@material-ui/lab'
 const styles = {
     card: {
         display: "flex",
@@ -46,16 +47,18 @@ const styles = {
 const ScreamSkeleton = (props)=> {
 const classes = props.classes;
 const content = Array.from ({length: 5}).map((item, index)=>(
-    <Card key={index} className={classes.card}>
-        <CardMedia image={noImg} className={classes.media} />
-        <CardContent  className={classes.cardContent}>
-            <div className={classes.handle} />
-            <div className={classes.time} />
-            <div className={classes.fullLine} />
-            <div className={classes.fullLine} />
-            <div className={classes.halfLine} />
-        </CardContent>
-    </Card>
+<Grid key={index} container spacing={2} >
+    <Grid item xs={2}>
+        <Skeleton variant='circle' height={50} width={50} animation='pulse'/>
+    </Grid>
+    <Grid  item xs={9}>
+    <Skeleton variant='text' width={200}  />
+
+    </Grid>
+    <Grid  item xs={12}>
+        <Skeleton variant='rect' height={50} />
+    </Grid>
+</Grid>
 ))
     return <Fragment>
         {content}

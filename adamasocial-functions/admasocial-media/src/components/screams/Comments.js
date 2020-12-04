@@ -15,8 +15,8 @@ import { DeleteOutline } from "@material-ui/icons";
 import store from "../../redux/store/store";
 const styles = {
   userImage: {
-    maxWidth: "100%",
-    height: 100,
+    maxWidth: store.getState().UI.isMobile ? 50 : "100%",
+    height: store.getState().UI.isMobile ? 50: 100,
     borderRadius: "50%",
     fitContent: "cover",
   },
@@ -36,17 +36,17 @@ handleDelete=()=>{
   render() {
     const {classes, comment, user:{credentials: {handle}, authenticated}}= this.props;
     return (
-      <Grid container >
+      <Grid container spacing={2}>
             <Grid item sm={12} >
               <Grid container alignItems="center" >
-                <Grid item sm={2}>
+                <Grid item xs={4} sm={2}>
                   <img
                     src={comment.userImage}
                     alt="user image"
                     className={classes.userImage}
                   />
                 </Grid>
-                <Grid item sm={9} >
+                <Grid item xs={8} sm={9} >
                 <div className={classes.content}>
                       <Typography
                         variant="h5"

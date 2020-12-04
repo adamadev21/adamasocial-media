@@ -157,7 +157,7 @@ exports.getusUserDetails = (req, res) => {
                 comments: comments,
               });
               const liked= [...userData.screams].filter(
-                (scream) => likes.includes(scream.screamId)
+                (scream) => likes.forEach(lk=>lk.screamId).includes(scream.screamId)
               );
               userData.likedScreams = liked
             });
@@ -176,7 +176,7 @@ exports.getusUserDetails = (req, res) => {
 exports.markNotificationsRead = (req, res) => {
   let batch = db.batch();
   req.body.forEach((notificationId) => {
-    const notification = db.doc(`/notifications/${notificationId}`);
+    const notification =db.doc(`/notifications/${notificationId}`);
     batch.update(notification, { read: true });
   });
   batch

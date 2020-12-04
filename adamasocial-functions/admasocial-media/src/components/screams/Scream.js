@@ -35,6 +35,7 @@ import {
 import EditScream from "./EditScream";
 import { Divider } from "@material-ui/core";
 import SharePost from "../../util/SharePost";
+import store from "../../redux/store/store";
 
 //*Extend dayjs to use relativetime
 dayjs.extend(relativeTime);
@@ -56,6 +57,10 @@ const styles = {
 
   },
   media: {
+    minWidth: 150,
+    height:  150,
+    borderRadius: "50%",
+  },  mobileMedia: {
     minWidth: "3.3rem",
     height: "3.3rem",
     borderRadius: "50%",
@@ -156,7 +161,7 @@ class Scream extends Component {
     return (
       <Card className={isMobile ? classes.mobileCard : classes.card} style={isMobile? {marginLeft: 1} : null}>
         <CardMedia
-          className={classes.media}
+          className={isMobile? classes.mobileMedia : classes.media}
           image={userImage}
           title="Profile Name"
         />
@@ -218,7 +223,7 @@ class Scream extends Component {
             >
               {commentCount} {"   "}
             </CommentButton>
-  <SharePost scream={this.props.scream} />
+  <SharePost scream={this.props.scream} isMobile={isMobile}/>
             <Button color="secondary">
               {userHandle === handle && <DeleteButton screamId={screamId} />}
             </Button>

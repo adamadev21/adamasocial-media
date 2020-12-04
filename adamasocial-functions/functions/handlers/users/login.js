@@ -2,7 +2,7 @@
 const firebase = require('firebase');
 const { db } = require("../../utilities/admin");
 const { loginValidation } = require("../../utilities/helpers/validation");
-exports.login = (req, res)=>{
+exports.login = (req, res, next)=>{
     const user = {
       email: req.body.email,
       password: req.body.password

@@ -37,6 +37,11 @@ const styles = (theme) => ({
     maxHeight: 150,
     borderRadius: "50%",
     objectFit: "cover",
+  },  mobileProfile: {
+    height: 80,
+    maxWidth: 80,
+    borderRadius: "50%",
+    objectFit: "cover",
   },
   dialogContent: {
     padding: 20,
@@ -86,7 +91,7 @@ class ScreamDialog extends Component {
         pictureUrl,
         commentCount,
       },
-      UI: { loading },
+      UI: { loading, isMobile},
       user, likedScream
     } = this.props;
     const commentMarkup = comments ? comments.map((comment,index)=>(
@@ -99,12 +104,12 @@ class ScreamDialog extends Component {
     ) : (
       <Grid
         container
-        spacing={5}
+        spacing={isMobile? 2 : 5}
       >
-        <Grid item xs={3}>
-          <img src={userImage} alt="Profile" className={classes.profileImage} />
+        <Grid item xs={4}>
+          <img src={userImage} alt="Profile" className={isMobile? classes.mobileProfile: classes.profileImage} />
         </Grid>
-        <Grid item xs={9} direction="column">
+        <Grid item xs={8} direction="column">
           <Typography
             variant="h6"
             color="primary"
@@ -126,7 +131,7 @@ class ScreamDialog extends Component {
             <LikeButton likedScream={likedScream} screamId={screamId}authenticated={authenticated}>{likeCount}</LikeButton> 
             <CommentButton >{commentCount}</CommentButton>
           </Fragment>
-          <CommentForm screamId={screamId} />
+          <CommentForm screamId={screamId} isMobile={isMobile} />
 
         </Grid>
       </Grid>

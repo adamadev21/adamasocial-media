@@ -42,14 +42,14 @@ this.setState({screams: this.props.data.screams},  this.props.getScreams())
     const { loading } = this.props.data;
     const {screams} = this.state;
     const { isMobile} = this.props.UI;
-   const screamMarkup = !screams ? <div>The forest is quiet...</div> : (!loading ? 
+   const screamMarkup = !screams ? <div>The forest is quiet...</div> : (! loading ? 
  screams.map((scream, index)=>(
    scream.sharedPost ? <SharedScream isMobile={isMobile} key={index} scream={scream} /> : 
        <Scream key={index} scream={scream} isMobile={isMobile} />
      )) : <ScreamSkeleton />
    )
     return (
-      <Grid container spacing={3} alignItems="center">
+      <Grid container spacing={isMobile? 3 : 10} alignItems="center">
         <Grid item sm={8} xs={12} wrap>
           {screamMarkup}
         </Grid> 

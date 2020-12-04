@@ -34,12 +34,7 @@ const { db } = require('./utilities/admin');
 //*Allow cross origin resource sharing
 const cors = require("cors");
 const { sendMessage, getOneConversation, getFriends, markRead } = require('./handlers/screams/messages/messages');
-const options = {
-  origin: "http://localhost:3000",
-  credentials: true,
-  optionsSuccessStatus: 200,
-}
-app.all("*", cors(options))
+app.use(cors({origin: "*", credentials: true}))
 //*===================>
 //*ROUTES************
 //******************* */
@@ -56,19 +51,19 @@ app.post('/scream/:screamId/comment', FBAuth, postComment);
 app.delete('/scream/comments/:commentId/delete', FBAuth, deleteComment);
 //*user routes
 app.post('/signup', signup);
-app.post('/login', login);
+app.post('/login', cors({origin: "*"}), login);
 app.post('/user/image', FBAuth, uploadImage);
 app.post('/user', FBAuth, addUserDetails);
 app.get('/user', FBAuth, getAuthenticatedUser);
 app.get('/user/:handle', getusUserDetails);
 app.get('/users/:handle/likedScreams', getLikes);
-app.get('notifications', FBAuth, markNotificationsRead)
+app.post('/notifications', FBAuth, markNotificationsRead)
 //* sending and receiving private messages
 app.post(`/messages/send/:recipient`, FBAuth, sendMessage)
 app.get(`/messages/:friendId`, FBAuth, getOneConversation)
 app.get("/messages/:friendId/read", FBAuth, markRead)
 app.get("/messages",FBAuth, getFriends)
-exports.api = functions.https.onRequest(app);
+exports.api = functions.region("us-central1", "us-east1").https.onRequest(app);
 
 //*Creat notifications
 exports.createNotificationOnLike = functions.firestore
@@ -77,7 +72,7 @@ exports.createNotificationOnLike = functions.firestore
    return db.doc(`/screams/${snapshot.data().screamId}`)
       .get()
       .then((doc) => {
-        if (doc.exists) {
+        if (doc.exists && doc.data().userHandle!== snapshot.data().userHandle) {
           return db.doc(`/notifications/${snapshot.id}`).set({
             createdAt: new Date().toISOString(),
             recipient: doc.data().userHandle,

@@ -32,7 +32,7 @@ export class SharePost extends Component {
     this.setState({ body: e.target.value });
   };
   render() {
-    const { scream } = this.props;
+    const { scream , isMobile} = this.props;
     return (
       <Fragment>
         <IconButton color="primary" onClick={this.handleOpen}>
@@ -53,7 +53,7 @@ export class SharePost extends Component {
               fullWidth
             />
             <hr />
-            <Scream scream={scream} />
+            <Scream scream={scream} isMobile={isMobile} />
           </DialogContent>
           <DialogActions>
             <Button color="secondary"> Cancel</Button>

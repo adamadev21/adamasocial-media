@@ -1,11 +1,12 @@
 import axios from 'axios';
+import { SIGN_IN_SUCCESSFULL , SIGN_UP_SUCCESSFULL} from '../utils/messages';
 import {
   LOADING_UI,
 MARK_NOTIFICATIONS_READ,
   SET_ERRORS, SET_LIKED_SCREAMS,
   CLEAR_ERRORS,GET_FRIENDS,
   SET_UNAUTHENTICATED,
-  SET_USER, LOADING_USER, SET_SCREAMS, STOP_LOADING_UI, SEND_MESSAGE, GET_MESSAGES, GET_CONVERSATION, READ_MESSAGE
+  SET_USER, LOADING_USER, SET_SCREAMS, STOP_LOADING_UI, SEND_MESSAGE, GET_MESSAGES, GET_CONVERSATION, READ_MESSAGE, SET_PROFILE, SET_MESSAGES
 } from '../utils/types';
 
 export const loginUser = (userData, history) => (dispatch) => {
@@ -20,6 +21,7 @@ export const loginUser = (userData, history) => (dispatch) => {
       dispatch(getUserData());
       history.push('/');
       dispatch({ type: CLEAR_ERRORS });
+      dispatch({type:SET_MESSAGES, payload: SIGN_IN_SUCCESSFULL})
     })
     .catch((err) => {
       console.log(err);
@@ -41,6 +43,7 @@ export const signupUser = (newUserData, history) => (dispatch) => {
       dispatch(getUserData());
       dispatch({ type: CLEAR_ERRORS });
       history.push('/');
+      dispatch({type:SET_MESSAGES, payload: SIGN_UP_SUCCESSFULL})
     })
     .catch((err) => {
       console.log(err);
@@ -92,11 +95,13 @@ export const getUserDetails = (userHandle)=>(dispatch)=>{
   dispatch({type: LOADING_UI});
   axios.get(`/user/${userHandle}`)
   .then(res=>{
-    dispatch({type: SET_SCREAMS, payload: res.data.screams})
+    dispatch({type: SET_PROFILE, payload: res.data})
+    dispatch({type: STOP_LOADING_UI});
   })
   .catch(err=>{
     console.log(err);
-    dispatch({type: SET_SCREAMS, payload: null})
+    dispatch({type: SET_PROFILE, payload: {}})
+    dispatch({type: STOP_LOADING_UI});
   })
 }
 //* Set authorization

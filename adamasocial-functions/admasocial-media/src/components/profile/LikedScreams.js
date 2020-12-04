@@ -18,7 +18,6 @@ import ScreamSkeleton from "../../util/ScreamSkeleton";
   }
 }
 const mapState = (state) => ({
-  screams: state.user.likedScreams,
   handle: state.user.credentials.handle,
 });
 

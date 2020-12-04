@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logoutUser } from '../../redux/actions/userActions';
 //* Icons
+import logo from "../../util/lclogo.png"
 import HomeIcon from '@material-ui/icons/Home';
 import OfflineBolt from '@material-ui/icons/OfflineBolt';
 import PostScream from '../screams/PostScream';
@@ -19,8 +20,11 @@ export class Navbar extends Component {
     const { user: {messages, authenticated} , UI: {isMobile}} = this.props;
     return (
       <div className="" style={{ justifyContent: 'center' }}>
-        <AppBar position='static'>
-          <Toolbar style={{ justifyContent: 'center' , position: isMobile ? "static" : "unset"}}>
+        <AppBar position='sticky'>
+
+          <Toolbar style={{ justifyContent: 'center' , position: isMobile ? "sticky" : "unset"}}>
+
+
             {authenticated ? (
               <Fragment>
                
@@ -30,7 +34,7 @@ export class Navbar extends Component {
                   <HomeIcon />
                 </Button>
            <Button>
-             <NotificationIcon />
+             <NotificationIcon isMobile={isMobile} />
            </Button>
                 <Button component={Link} to="/messages" style={{color: "white"}}>
                

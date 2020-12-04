@@ -25,7 +25,7 @@ export class CommentForm extends Component {
     this.props.commentScream(this.props.screamId, this.state);
   };
   render() {
-    const { authenticated } = this.props.user;
+    const { isMobile, user:{authenticated},} = this.props;
 const errors = this.state.errors
     const commentMarkup = authenticated ? (
       <Grid item style={{ textAlign: "center" }}>
@@ -41,7 +41,7 @@ const errors = this.state.errors
       variant='outlined'
             fullWidth
           />
-          <Button type="submit" variant = "contained" color="primary" style={{postion: "absolute", left: "36%", marginTop: "5px"}}>
+          <Button type="submit" variant = "contained" color="primary" style={isMobile ? {marginTop: 5} : {postion: "absolute", left: "36%", marginTop: "5px"}}>
               Submit
           </Button>
         </form>

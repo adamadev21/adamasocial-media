@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import logo from "./logo.png";
+import logo from "../util/lclogo.png";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 //*Material Ui stuff
@@ -12,10 +12,11 @@ import Typography from "@material-ui/core/Typography";
 //*Redux stuff here
 import { connect } from "react-redux";
 import { signupUser } from "../redux/actions/userActions";
-
+import store from "../redux/store/store";
+const UI = store.getState().UI
 const styles = {
   form: {
-    padding: 20,
+    padding: UI.isMobile? 2: 20,
     textAlign: "center",
   },
   formField: {
@@ -23,9 +24,11 @@ const styles = {
     flexDirection: "column",
   },
   image: {
-    marginBottom: "50px",
-    maxWidth: "60px",
-    maxHeight: "60px",
+    marginBottom: UI.isMobile ? 5 : "10px",
+  },
+  mobileImage : {
+    marginBottom: 5,
+
   },
   button: {
     color: "primary",
@@ -87,17 +90,19 @@ export class Signup extends Component {
   render() {
     const {
       classes,
-      UI: { loading },
+      UI: { loading, isMobile },
     } = this.props;
     const { errors } = this.state;
     return (
-      <Grid container className={classes.form}>
+      <Grid
+        container spacing={isMobile? 1 : 5}
+        className={classes.form}
+      >
         <Grid item xs={12}>
-        <img src={logo} className={classes.image} sizes={8} />
-          </Grid>
-          <Grid item xs={3} />
-          <Grid item xs={6}>
-   
+          <img src={logo} className={isMobile? classes.mobileImage : classes.image} sizes={isMobile ? 5 : 8} />
+        </Grid>
+        <Grid item sm={3} />
+        <Grid item xs={12} sm={6} style={{background: "floralwhite"}}>
           <Typography
             variant="h6"
             color="textPrimary"
@@ -107,55 +112,55 @@ export class Signup extends Component {
           </Typography>
           <form className={classes.formField} onSubmit={this.handleSubmit}>
             <TextField
-              error={errors.handle ? true : false}
+size={isMobile? "small" : "medium"}              error={errors.handle ? true : false}
               id="standard-primary"
               name="handle"
               label="Name"
               helperText={errors.handle}
-              variant="standard"
+              variant={isMobile ? "outlined" : "outlined"}
               value={this.state.handle}
               onChange={this.handleChange}
               className={classes.textField}
             />{" "}
             <TextField
-              error={errors.email ? true : false}
-              id="standard-primary"
+size={isMobile? "small" : "medium"}              error={errors.email ? true : false}
+              id="outlined-primary"
               name="email"
               label="Email"
               helperText={errors.email}
-              variant="standard"
+              variant={isMobile ? "outlined" : "outlined"}
               value={this.state.email}
               onChange={this.handleChange}
               className={classes.textField}
             />{" "}
             <TextField
-              error={errors.email ? true : false}
-              id="standard-primary"
+size={isMobile? "small" : "medium"}              error={errors.email ? true : false}
+              id="outlined-primary"
               name="fullName"
               label="Full Name"
               helperText={errors.email}
-              variant="standard"
+              variant={isMobile ? "outlined" : "outlined"}
               value={this.state.fullName}
               onChange={this.handleChange}
               className={classes.textField}
             />
             <TextField
-              error={errors.password ? true : false}
+size={isMobile? "small" : "medium"}              error={errors.password ? true : false}
               id="standard-secondary"
               name="password"
               label="Password"
-              variant="standard"
+              variant={isMobile ? "outlined" : "outlined"}
               value={this.state.password}
               helperText={errors.password}
               className={classes.textField}
               onChange={this.handleChange}
             />
             <TextField
-              error={errors.confirmPassword}
-              id="standard-secondary"
+size={isMobile? "small" : "medium"}              error={errors.confirmPassword}
+              id="outlined-secondary"
               name="confirmPassword"
               label="Confirm Password"
-              variant="standard"
+              variant={isMobile ? "outlined" : "outlined"}
               value={this.state.confirmPassword}
               helperText={errors.confirmPassword}
               className={classes.textField}
@@ -178,6 +183,7 @@ export class Signup extends Component {
               {loading ? (
                 <CircularProgress
                   size={60}
+                  thickness={3}
                   value="indeterminate"
                   className={classes.progess}
                 />

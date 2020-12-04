@@ -11,6 +11,7 @@ export const LOADING_DATA = "LOADING_DATA"
 export const STOP_LOADING_UI = "STOP_LOADING_UI"
 export const SET_DESKTOP = "SET_DESKTOP"
 export const SET_MOBILE = "SET_MOBILE"
+export const SET_MESSAGES = "SET_MESSAGES"
 
 
 //* Data types
@@ -26,6 +27,7 @@ export const SET_COMMENT = "SET_COMMENT"
 export const SUBMIT_COMMENT = "SUBMIT_COMMENT"
 export const DELETE_COMMENT = "DELETE_COMMENT"
 export const SHARE_SCREAM = "SHARE_SCREAM"
+export const SET_PROFILE = "SET_PROFILE"
 //*Message center
 export const SEND_MESSAGE = "SEND_MESSAGE"
 export const GET_MESSAGES = "GET_MESSAGES"

@@ -201,14 +201,14 @@ const {showingList} = this.state;
             
           </Grid>
       {showingList&& 
-      <Grid item xs={12} component={Paper} className={classes.chatSection}>
+      <Grid item xs={12} sm={3} component={Paper} className={classes.chatSection}>
           <MessageList loading={loading} messages= {messages} friends={friends} user={user} handleOpenMessage={this.handleOpenMessage} />
       </Grid> }
-          {!showingList && <Grid item sm={9} xs={12}>
+          {(!isMobile || !showingList) && <Grid item sm={9} xs={12}>
             <List className={classes.messageArea} >{messageMarkup}</List>
             <Divider />
             </Grid>}
-            { !showingList &&  <Grid item container style={{ padding: "20px" }}>
+            {(!isMobile || !showingList)  &&  <Grid item container style={{ padding: "20px" }}>
               <Grid item xs={11}>
                 <TextField
                   value={this.state.message}

@@ -6,6 +6,7 @@ SET_UNAUTHENTICATED,
 SET_USER,
 LOADING_USER, LIKE_SCREAM, UNLIKE_SCREAM, MARK_NOTIFICATIONS_READ, SEND_MESSAGE, GET_MESSAGES, SET_LIKED_SCREAMS, READ_MESSAGE, GET_CONVERSATION
 } from '../../utils/types';
+import store from '../store';
 
 const initialState = {
     authenticated: false,
@@ -38,8 +39,10 @@ const userReducer = (state=initialState, action)=>{
                 ...state, loading: true
             };
         case LIKE_SCREAM:
+            const scream = store.getState().data.screams[store.getState().data.screams.findIndex(sc=>sc.screamId===action.payload.screamId)]
             return {
                 ...state,
+                likedScreams: {...state.likedScreams, scream},
                 likes: [
                     ...state.likes, {
                         userHandle:state.credentials.handle,

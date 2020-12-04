@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import logo from "./logo.png";
+import logo from "../util/lclogo.png";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Link } from "react-router-dom";
@@ -23,9 +23,9 @@ const styles = {
     flexDirection: "column",
   },
   image: {
-    marginBottom: "50px",
-    maxWidth: "60px",
-    maxHeight: "60px",
+    marginBottom: "10px",
+    maxWidth: "200px",
+    maxHeight: "200px",
   },
   button: {
     color: "primary",
@@ -90,7 +90,7 @@ export class Login extends Component {
     return (
       <Grid container className={classes.form}>
         <Grid item xs={12}>
-          <img src={logo} className={classes.image} sizes={8} />
+          <img src={logo} className={classes.image} sizes={15} />
         </Grid>
         <Grid item sm={3} />
         <Grid item sm={6}xs={12}>
@@ -161,12 +161,12 @@ export class Login extends Component {
           </Typography>
         </Grid>
         <Grid item sm={3} />
-        <Grid item xs={12}  >
-      <Button className={isMobile ? classes.mobileButton : classes.button} style={{textTransform: "none"}}  variant='contained' color="primary" size="small">
+        <Grid item xs={12} aling='center'  >
+      <Button className={isMobile ? classes.mobileButton : null} style={{textTransform: "none", }} variant='contained' color="primary" size="small">
         <Facebook name="facebook" /> Login with Facebook
       </Button>
 
-      <Button className={isMobile ? classes.mobileButton : classes.button} style={{textTransform: "none"}} variant='contained' color="secondary" size='small' >
+      <Button className={isMobile ? classes.mobileButton : null} style={{textTransform: "none"}} variant='contained' color="secondary" size='small' >
      <Icon />
         Login with Google
       </Button>

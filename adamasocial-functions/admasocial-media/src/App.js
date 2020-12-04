@@ -8,7 +8,7 @@ import Home from './pages/home';
 import Signup from './pages/signup';
 import Login from './pages/login';
 import Navbar from './components/layout/Navbar';
-
+import UIMessage from "./components/layout/UIMessage"
 //*Material ui stuff
 
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
@@ -24,9 +24,10 @@ import { SET_AUTHENTICATED, SET_DESKTOP, SET_MOBILE } from './redux/utils/types'
 import { logoutUser, getUserData, getFriends } from './redux/actions/userActions';
 import user  from './pages/user';
 import messages from './pages/messages';
-axios.defaults.headers.common["Access-Control-Allow-Origin"] = true;
-
-axios.defaults.baseURL = "http://localhost:5006/admasocial-media/us-central1/api"
+import Profile  from './components/profile/Profile';
+axios.defaults.headers.post["Access-Control-Allow-Origin"] = '*';
+axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
+axios.defaults.baseURL = "https://us-central1-admasocial-media.cloudfunctions.net/api"
 const theme = createMuiTheme(themeFile);
 
 const token = localStorage.FBIdToken;
@@ -59,9 +60,11 @@ render() {
       <div className="App">
         <Router>
           <Navbar />
-          <div className="container">
+          <UIMessage />
+          <div>
             <Switch>
               <Route path="/" exact component={Home} />
+              <Route path='/my-account' exact component={Profile} />
               <AuthRoute path="/signup" exact component={Signup}  />
               <AuthRoute path="/login" exact component={Login} />
               <Route exact  path="/users/:handle" component={user} />

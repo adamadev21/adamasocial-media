@@ -80,31 +80,21 @@ class user extends Component {
     screamIdParam: null,
     open: this.props.UI.isMobile,
   };
-  componentDidMount() {
-    store.dispatch(getUserData());
+  componentWillMount() {
     const handle = this.props.match.params.handle;
     const screamId = this.props.match.params.screamId;
     this.props.getUserDetails(handle);
-    this.setState({ screamIdParam: screamId });
-    axios
-      .get(`/user/${handle}`)
-      .then((res) => {
-        this.setState({ profile: res.data.user });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }
   handleChange = (event, newValue) => {
     this.setState({ value: newValue });
   };
 
   render() {
-    const { classes, user, data: {screams, loading}, UI: {isMobile} } = this.props;
+    const { classes, profile: {user, screams, likedScreams,}, UI: {isMobile, loading} } = this.props;
     const { screamIdParam } = this.state;
     const screamsMarkup = loading ? (
       <p> Please wait while we are loading the stuff</p>
-    ) : screams === null || screams.length === 0 ? (
+    ) : !screams || screams.length === 0 ? (
       <p>This screamer has not screamed yet </p>
     ) : !screamIdParam ? (
       screams.map((scream) => <Scream isMobile={isMobile} key={scream.screamId} scream={scream} />)
@@ -115,6 +105,8 @@ class user extends Component {
         else return <Scream key={scream.screamId} scream={scream} openDialog isMobile={isMobile}/>;
       })
     );
+    const media = user?  [user.imageUrl,] :  []
+    if(screams) screams.forEach(scream=>{if(scream.pictureUrl) media.push(scream.pictureUrl)})
     const { value } = this.state;
     return (
       <div className={isMobile ? classes.rootMobile : classes.root}>
@@ -126,7 +118,7 @@ class user extends Component {
             onChange={this.handleChange}
             aria-label="simple tabs example"
           >
-            <Tab label="Screams" {...a11yProps(0)} />
+            <Tab label="Thoughts" {...a11yProps(0)} />
             <Tab label="Likes" {...a11yProps(1)} />
             <Tab label="Media" {...a11yProps(2)} />{" "}
             <Tab label="Profile" {...a11yProps(3)} />
@@ -145,7 +137,7 @@ class user extends Component {
         <TabPanel value={value} index={1}>
         <Grid container spacing={1}>
             <Grid item xs={12} sm={8}>
-            <LikedScreams user={user} />
+            <LikedScreams user={user} screams={likedScreams}/>
             </Grid>
             {!isMobile &&     <Grid item sm={4}>
   <Profile user={this.props.user} />
@@ -154,13 +146,26 @@ class user extends Component {
 
           </TabPanel>{" "}
         <TabPanel value={value} index={2}>
-          <Typography>Media</Typography>
+          <Grid container spacing={4}>
+    
+<Grid item xs={12}>
+<Typography>Media</Typography>
+</Grid>
+     
+        
+          {media.map(url=>(
+                    <Grid item xs={3}>
+                 <img src={url} alt="fafa" />
+                    </Grid>
+         
+          ))}
+                    </Grid>
         </TabPanel>
         <TabPanel value={value} index={3}>
-          {this.state.profile === null ? (
+          {this.props.profile === null ? (
             <p>Profile loading ...</p>
           ) : (
-            <StaticProfile profile={this.state.profile} />
+            <StaticProfile profile={user} />
           )}
         </TabPanel>
       </div>
@@ -174,7 +179,7 @@ user.propTypes = {
 const mapStateToProps = (state) => ({
   user: state.user,
   UI: state.UI,
-  data: state.data,
+  profile: state.data.profile,
 });
 const mapActionsToProps = {
   getUserDetails,

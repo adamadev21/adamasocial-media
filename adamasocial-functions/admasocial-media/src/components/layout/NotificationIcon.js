@@ -36,7 +36,7 @@ export class NotificationIcon extends Component {
 
   render() {
     const ancorEl = this.state.ancorEl;
-    const { notifications } = this.props;
+    const { notifications, isMobile} = this.props;
 
     let notificationsMarkup;
     if (notifications && notifications.length > 0) {
@@ -64,9 +64,9 @@ export class NotificationIcon extends Component {
           const iconColor = not.read ? "primary" : "secondary";
           const icon =
             not.type === "like" ? (
-              <Favorite style={{ marginRight: 10 }} color={iconColor} />
+              <Favorite style={{ marginRight:isMobile ? 1: 10 }} color={iconColor} />
             ) : (
-              <Chat color={iconColor} style={{ marginRight: 10 }} />
+              <Chat color={iconColor} style={{ marginRight: isMobile? 1 : 10 }} />
             );
           return (
             <MenuItem key={not.createdAt} onClick={this.handleClose}>
@@ -89,14 +89,16 @@ export class NotificationIcon extends Component {
       <Fragment>
         <Tooltip title=" Notifications" placement="top">
           <IconButton
-            aria-owns={ancorEl ? "simple-menu" : undefined}
+            aria-owns={ancorEl && !isMobile ? "simple-menu" : undefined}
             aria-haspopup="true"
             onClick={this.handleOpen}
           >{notificationsMarkup}</IconButton>
         </Tooltip>
-        <div style={{position: "absolute", top: "30%"}}>
-        <Menu
-          anchorEl={ancorEl}
+        <div >
+        <Menu style={isMobile? {width: "60%"}: null}
+          anchorEl={isMobile? null : ancorEl}
+          anchorOrigin={{vertical: "top", horizontal: "center"}}
+
           open={Boolean(ancorEl)}
           onClose={this.handleClose}
           onEntered={this.handleNotifications}

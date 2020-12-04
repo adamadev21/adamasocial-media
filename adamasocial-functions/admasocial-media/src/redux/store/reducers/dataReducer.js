@@ -10,12 +10,14 @@ import {
 MARK_NOTIFICATIONS_READ,
 EDIT_POST,
 DELETE_COMMENT,
-SHARE_SCREAM} from "../../utils/types";
+SHARE_SCREAM,
+SET_PROFILE} from "../../utils/types";
 
 const initialState = {
   screams: [],
   scream: {},
   loading: false,
+  profile: {}
 };
 
 const dataReducer = (state = initialState, action) => {
@@ -31,6 +33,10 @@ const dataReducer = (state = initialState, action) => {
         screams: action.payload,
         loading: false,
       };
+    case SET_PROFILE:
+      return {
+        ...state, profile: action.payload
+      }
     case POST_SCREAM:
       return {
         ...state,
